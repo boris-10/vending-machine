@@ -1,0 +1,18 @@
+{
+  "name": "vending-machine",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "run-s install:**",
+    "install:backend": "cd packages/backend && npm ci",
+    "install:frontend": "cd packages/frontend && npm ci",
+    "dev:backend": "cd packages/backend && npm run start:dev",
+    "dev:frontend": "cd packages/frontend && npm run start"
+  },
+  "keywords": [],
+  "author": "",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
