@@ -20,8 +20,9 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prisma:generate": "prisma generate",
-    "prisma:seed": "prisma db seed --preview-feature",
-    "prisma:push": "prisma db push --skip-generate"
+    "prisma:push": "prisma db push --skip-generate",
+    "prisma:reset": "prisma migrate reset --force --skip-generate --skip-seed",
+    "prisma:seed": "npm run prisma:reset && npm run prisma:push && ts-node prisma/seed"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",

@@ -14,6 +14,8 @@ Using [React](https://reactjs.org/) and created with `create-react-app`.
 
 Using [NestJS](https://nestjs.com/) and scaffolded with NestJS CLI.
 
+Database used is SQLite and ORM is Prisma.
+
 ## Development
 
 After cloning repo, do:
@@ -23,6 +25,17 @@ npm install
 ```
 
 This will run postinstall script and install dependencies in both packages.
+
+### Seeding
+
+To seed the database run
+
+```bash
+cd packages/backend
+npm run prisma:seed
+```
+
+### Start
 
 Start backend and frontend dev servers with
 
