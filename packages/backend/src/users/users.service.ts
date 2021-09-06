@@ -1,17 +1,22 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, ConflictException } from '@nestjs/common'
 import { PrismaService } from 'nestjs-prisma'
+import { PasswordService } from './password.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, protected readonly passwordService: PasswordService) {}
 
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
+    if (await this.isUsernameTaken(createUserDto.username)) {
+      throw new ConflictException('Username already taken')
+    }
+
     return this.prisma.user.create({
       data: {
         username: createUserDto.username,
-        password: createUserDto.password,
+        password: await this.passwordService.hash(createUserDto.password),
         role: createUserDto.role,
         deposit: createUserDto.deposit,
       },
@@ -50,5 +55,15 @@ export class UsersService {
         id,
       },
     })
+  }
+
+  private async isUsernameTaken(username: string): Promise<boolean> {
+    const count = await this.prisma.user.count({
+      where: {
+        username,
+      },
+    })
+
+    return count !== 0
   }
 }
