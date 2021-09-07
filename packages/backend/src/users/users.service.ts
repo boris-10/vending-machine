@@ -41,6 +41,14 @@ export class UsersService {
     })
   }
 
+  findByUsername(username: string) {
+    return this.prisma.user.findUnique({
+      where: {
+        username,
+      },
+    })
+  }
+
   update(id: number, updateUserDto: UpdateUserDto) {
     return this.prisma.user.update({
       where: {
@@ -74,16 +82,7 @@ export class UsersService {
   }
 
   async validateUser(username: string, password: string): Promise<Partial<User> | null> {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        username,
-      },
-      select: {
-        id: true,
-        username: true,
-        password: true,
-      },
-    })
+    const user = await this.findByUsername(username)
 
     if (user && (await this.passwordService.compare(password, user.password))) {
       return user
@@ -92,7 +91,7 @@ export class UsersService {
     return null
   }
 
-  generateAccessToken(email: string): Promise<string> {
-    return this.jwtService.signAsync({ email })
+  generateAccessToken(username: string): Promise<string> {
+    return this.jwtService.signAsync({ username })
   }
 }
