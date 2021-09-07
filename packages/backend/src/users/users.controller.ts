@@ -1,9 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UnauthorizedException, UseGuards } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
-import { CredentialsDto } from './dto/credentials.dto'
-import { JwtAuthGuard } from './auth/jwtAuth.guard'
+import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 
 @Controller('users')
 export class UsersController {
@@ -36,17 +35,5 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id)
-  }
-
-  @Post('login')
-  async login(@Body() { username, password }: CredentialsDto) {
-    const user = await this.usersService.validateUser(username, password)
-    if (!user) {
-      throw new UnauthorizedException('The credentials are incorrect')
-    }
-
-    const accessToken = await this.usersService.generateAccessToken(user.username)
-
-    return { accessToken }
   }
 }
