@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UnauthorizedExceptio
 import { UsersService } from './users.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
-import { Credentials } from './dto/credentials.dto'
+import { CredentialsDto } from './dto/credentials.dto'
 import { JwtAuthGuard } from './auth/jwtAuth.guard'
 
 @Controller('users')
@@ -39,7 +39,7 @@ export class UsersController {
   }
 
   @Post('login')
-  async login(@Body() { username, password }: Credentials) {
+  async login(@Body() { username, password }: CredentialsDto) {
     const user = await this.usersService.validateUser(username, password)
     if (!user) {
       throw new UnauthorizedException('The credentials are incorrect')
