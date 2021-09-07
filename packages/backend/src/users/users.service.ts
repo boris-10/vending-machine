@@ -1,12 +1,18 @@
 import { Injectable, ConflictException } from '@nestjs/common'
+import { JwtService } from '@nestjs/jwt'
 import { PrismaService } from 'nestjs-prisma'
+import { User } from '@prisma/client'
 import { PasswordService } from './password.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService, protected readonly passwordService: PasswordService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    protected readonly passwordService: PasswordService,
+    private readonly jwtService: JwtService
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
     if (await this.isUsernameTaken(createUserDto.username)) {
@@ -65,5 +71,28 @@ export class UsersService {
     })
 
     return count !== 0
+  }
+
+  async validateUser(username: string, password: string): Promise<Partial<User> | null> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        username,
+      },
+      select: {
+        id: true,
+        username: true,
+        password: true,
+      },
+    })
+
+    if (user && (await this.passwordService.compare(password, user.password))) {
+      return user
+    }
+
+    return null
+  }
+
+  generateAccessToken(email: string): Promise<string> {
+    return this.jwtService.signAsync({ email })
   }
 }
