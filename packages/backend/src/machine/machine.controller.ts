@@ -1,34 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common'
+import { Controller, Post, Body } from '@nestjs/common'
 import { MachineService } from './machine.service'
-import { CreateMachineDto } from './dto/create-machine.dto'
-import { UpdateMachineDto } from './dto/update-machine.dto'
+import { BuyRequestDto } from './dto/buy-request.dto'
+import { DepositRequestDto } from './dto/deposit-request.dto'
 
 @Controller('machine')
 export class MachineController {
   constructor(private readonly machineService: MachineService) {}
 
-  @Post()
-  create(@Body() createMachineDto: CreateMachineDto) {
-    return this.machineService.create(createMachineDto)
+  @Post('deposit')
+  deposit(@Body() { amount }: DepositRequestDto) {
+    return this.machineService.deposit(amount)
   }
 
-  @Get()
-  findAll() {
-    return this.machineService.findAll()
+  @Post('buy')
+  buy(@Body() { productId, amount }: BuyRequestDto) {
+    return this.machineService.buy(productId, amount)
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.machineService.findOne(+id)
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMachineDto: UpdateMachineDto) {
-    return this.machineService.update(+id, updateMachineDto)
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.machineService.remove(+id)
+  @Post('reset')
+  reset() {
+    return this.machineService.reset()
   }
 }

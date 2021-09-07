@@ -1,26 +1,20 @@
 import { Injectable } from '@nestjs/common'
-import { CreateMachineDto } from './dto/create-machine.dto'
-import { UpdateMachineDto } from './dto/update-machine.dto'
+import { ProductsService } from 'src/products/products.service'
+import { UsersService } from 'src/users/users.service'
 
 @Injectable()
 export class MachineService {
-  create(createMachineDto: CreateMachineDto) {
-    return 'This action adds a new machine'
+  constructor(protected readonly usersService: UsersService, protected readonly productsService: ProductsService) {}
+
+  reset() {
+    throw new Error('Method not implemented.')
   }
 
-  findAll() {
-    return `This action returns all machine`
+  buy(productId: number, amount: number) {
+    throw new Error('Method not implemented.')
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} machine`
-  }
-
-  update(id: number, updateMachineDto: UpdateMachineDto) {
-    return `This action updates a #${id} machine`
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} machine`
+  deposit(amount: number) {
+    throw new Error('Method not implemented.')
   }
 }

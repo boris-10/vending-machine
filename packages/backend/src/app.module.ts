@@ -10,14 +10,14 @@ import { MachineModule } from './machine/machine.module'
 
 @Module({
   imports: [
-    UsersModule,
-    ProductsModule,
-    AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [AppConfig],
       cache: true,
     }),
+    UsersModule,
+    ProductsModule,
+    AuthModule,
     MachineModule,
   ],
   controllers: [AppController],
