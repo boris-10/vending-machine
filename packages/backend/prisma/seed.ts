@@ -19,6 +19,7 @@ async function main() {
     create: {
       username: 'test1@example.com',
       password: await hashPassword('123456'),
+      role: 'seller',
     },
   })
 
@@ -28,6 +29,7 @@ async function main() {
     create: {
       username: 'test2@example.com',
       password: await hashPassword('123456'),
+      role: 'seller',
     },
   })
 
@@ -37,7 +39,59 @@ async function main() {
     create: {
       username: 'test3@example.com',
       password: await hashPassword('123456'),
-      role: 'seller',
+    },
+  })
+
+  await prisma.user.upsert({
+    where: { id: 4 },
+    update: {},
+    create: {
+      username: 'test4@example.com',
+      password: await hashPassword('123456'),
+    },
+  })
+
+  await prisma.product.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+      productName: 'Apple',
+      amountAvailable: 3,
+      cost: 10,
+      sellerId: 1,
+    },
+  })
+
+  await prisma.product.upsert({
+    where: { id: 2 },
+    update: {},
+    create: {
+      productName: 'Soda',
+      amountAvailable: 8,
+      cost: 7,
+      sellerId: 1,
+    },
+  })
+
+  await prisma.product.upsert({
+    where: { id: 3 },
+    update: {},
+    create: {
+      productName: 'Banana',
+      amountAvailable: 1,
+      cost: 4,
+      sellerId: 2,
+    },
+  })
+
+  await prisma.product.upsert({
+    where: { id: 4 },
+    update: {},
+    create: {
+      productName: 'Coffee',
+      amountAvailable: 2,
+      cost: 12,
+      sellerId: 2,
     },
   })
 }
