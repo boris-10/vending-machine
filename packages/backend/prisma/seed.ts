@@ -17,7 +17,7 @@ async function main() {
     where: { id: 1 },
     update: {},
     create: {
-      username: 'test1@example.com',
+      username: 'test1',
       password: await hashPassword('123456'),
       role: 'seller',
     },
@@ -27,7 +27,7 @@ async function main() {
     where: { id: 2 },
     update: {},
     create: {
-      username: 'test2@example.com',
+      username: 'test2',
       password: await hashPassword('123456'),
       role: 'seller',
     },
@@ -37,7 +37,7 @@ async function main() {
     where: { id: 3 },
     update: {},
     create: {
-      username: 'test3@example.com',
+      username: 'test3',
       password: await hashPassword('123456'),
     },
   })
@@ -46,7 +46,7 @@ async function main() {
     where: { id: 4 },
     update: {},
     create: {
-      username: 'test4@example.com',
+      username: 'test4',
       password: await hashPassword('123456'),
     },
   })
