@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 import './App.css'
@@ -10,6 +10,7 @@ import ProductPage from './components/pages/ProductPage'
 import UserListPage from './components/pages/UserListPage'
 import UserPage from './components/pages/UserPage'
 import VendingMachinePage from './components/pages/VendingMachinePage'
+import Header from './components/core/Header'
 
 const queryClient = new QueryClient()
 
@@ -18,13 +19,7 @@ function App(): JSX.Element {
     <QueryClientProvider client={queryClient}>
       <Router>
         <div className="App">
-          <Link to="/vending-machine">VENDING MACHINE</Link>
-          <br />
-          <Link to="/products">PRODUCTS</Link>
-          <br />
-          <Link to="/users">USERS</Link>
-
-          <br />
+          <Header />
           <br />
 
           <Switch>

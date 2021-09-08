@@ -63,3 +63,16 @@
   cursor: pointer;
   background-color: whitesmoke;
 }
+
+.Header {
+  display: flex;
+  justify-content: space-between;
+}
+.Header__links {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+.Header__links > * {
+  margin-right: 20px;
+}
