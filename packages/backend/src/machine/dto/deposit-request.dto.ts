@@ -1,6 +1,8 @@
-import { IsInt } from 'class-validator'
+import { IsIn, IsInt, IsPositive } from 'class-validator'
 
 export class DepositRequestDto {
   @IsInt()
-  amount!: number
+  @IsPositive()
+  @IsIn([5, 10, 20, 50, 100])
+  amount: number
 }

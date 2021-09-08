@@ -1,15 +1,19 @@
-import { IsString, IsInt } from 'class-validator'
+import { IsInt, IsPositive, IsNotEmpty, IsAlphanumeric } from 'class-validator'
 
 export class CreateProductDto {
-  @IsString()
+  @IsNotEmpty()
+  @IsAlphanumeric()
   productName: string
 
   @IsInt()
+  @IsPositive()
   amountAvailable: number
 
   @IsInt()
+  @IsPositive()
   cost: number
 
   @IsInt()
+  @IsPositive()
   sellerId: number
 }

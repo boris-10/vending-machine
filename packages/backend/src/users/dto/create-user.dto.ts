@@ -1,17 +1,16 @@
-import { IsString, IsInt, IsOptional } from 'class-validator'
+import { IsString, IsOptional, IsAlphanumeric, IsNotEmpty, Matches } from 'class-validator'
 
 export class CreateUserDto {
-  @IsString()
+  @IsNotEmpty()
+  @IsAlphanumeric()
   username: string
 
   @IsString()
+  @IsNotEmpty()
   password: string
-
-  @IsInt()
-  @IsOptional()
-  deposit: number
 
   @IsString()
   @IsOptional()
-  role: string
+  @Matches(/^(buyer|seller)$/, { message: "Can't match role, use 'buyer' or 'seller'" })
+  role: 'buyer' | 'seller'
 }
