@@ -8,10 +8,21 @@ interface LoginModel {
   password: string
 }
 
-function LoginForm(): JSX.Element {
-  const loginMutation = useMutation((loginModel: LoginModel) =>
-    axios.post('http://localhost:8080/auth/login', loginModel)
-  )
+interface LoginFormProps {
+  onLoginSuccess: () => void
+}
+
+function LoginForm(props: LoginFormProps): JSX.Element {
+  const loginMutation = useMutation(async (loginModel: LoginModel) => {
+    try {
+      const response = await axios.post('http://localhost:8080/auth/login', loginModel)
+      localStorage.setItem('jwt', response.data.accessToken)
+
+      props.onLoginSuccess()
+    } catch (error) {
+      throw error
+    }
+  })
 
   return (
     <div>

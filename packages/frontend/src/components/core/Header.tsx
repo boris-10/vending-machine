@@ -1,7 +1,16 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
+
+import Button from '../atoms/Button'
 
 function Header(): JSX.Element {
+  const history = useHistory()
+
+  const logout = () => {
+    localStorage.removeItem('jwt')
+    history.push('/login')
+  }
+
   return (
     <div className="Header">
       <div className="Header__links">
@@ -11,6 +20,8 @@ function Header(): JSX.Element {
       </div>
 
       <span>TODO username</span>
+
+      <Button onClick={logout} text="Logout" />
     </div>
   )
 }
