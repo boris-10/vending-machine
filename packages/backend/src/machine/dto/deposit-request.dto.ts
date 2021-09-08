@@ -1,9 +1,9 @@
 import { IsIn, IsInt, IsPositive } from 'class-validator'
-import { COIN_DENOMINATORS } from 'src/app.constants'
+import { COIN_DENOMINATIONS } from 'src/app.constants'
 
 export class DepositRequestDto {
   @IsInt()
   @IsPositive()
-  @IsIn(COIN_DENOMINATORS)
+  @IsIn(COIN_DENOMINATIONS)
   amount: number
 }
