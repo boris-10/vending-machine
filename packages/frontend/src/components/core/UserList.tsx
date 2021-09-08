@@ -9,14 +9,7 @@ interface UserListProps {
 }
 
 function UserList(props: UserListProps): JSX.Element {
-  const { isLoading, isError, data, error } = useQuery('fetchUsers', () =>
-    axios('http://localhost:8080/users', {
-      headers: {
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWF0IjoxNjMxMTAzMzQ4fQ.yqitnSBq20KnHZybDi8dRHCbIEQ0P8bH4bed37Fu7fQ',
-      },
-    })
-  )
+  const { isLoading, isError, data, error } = useQuery('fetchUsers', () => axios('http://localhost:8080/users'))
 
   return (
     <div className="UserList">

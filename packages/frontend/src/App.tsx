@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import axios from 'axios'
 
 import './App.css'
 import LoginPage from './components/pages/LoginPage'
@@ -14,6 +15,19 @@ import Header from './components/core/Header'
 
 const queryClient = new QueryClient()
 
+axios.interceptors.request.use(
+  (request) => {
+    const token = localStorage.getItem('jwt')?.toString()
+    if (token) {
+      request.headers['Authorization'] = `Bearer ${token}`
+    }
+    return request
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
+
 function App(): JSX.Element {
   const isLoggedIn = Boolean(localStorage.getItem('jwt'))
 
@@ -21,7 +35,7 @@ function App(): JSX.Element {
     <QueryClientProvider client={queryClient}>
       <Router>
         <div className="App">
-          <Header />
+          {isLoggedIn && <Header />}
           <br />
 
           {!isLoggedIn && <Redirect to="/login" />}

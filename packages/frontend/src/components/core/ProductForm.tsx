@@ -15,31 +15,15 @@ function ProductForm(props: ProductFormProps): JSX.Element {
     const { id, ...payload } = productModel
 
     if (productModel.id) {
-      return axios.patch(`http://localhost:8080/products/${productModel.id}`, payload, {
-        headers: {
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWF0IjoxNjMxMTAzMzQ4fQ.yqitnSBq20KnHZybDi8dRHCbIEQ0P8bH4bed37Fu7fQ',
-        },
-      })
+      return axios.patch(`http://localhost:8080/products/${productModel.id}`, payload)
     } else {
-      return axios.post('http://localhost:8080/products', payload, {
-        headers: {
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWF0IjoxNjMxMTAzMzQ4fQ.yqitnSBq20KnHZybDi8dRHCbIEQ0P8bH4bed37Fu7fQ',
-        },
-      })
+      return axios.post('http://localhost:8080/products', payload)
     }
   })
 
   const { isLoading, isError, data, error, remove } = useQuery(
     'fetchProductById',
-    () =>
-      axios(`http://localhost:8080/products/${props.productId}`, {
-        headers: {
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWF0IjoxNjMxMTAzMzQ4fQ.yqitnSBq20KnHZybDi8dRHCbIEQ0P8bH4bed37Fu7fQ',
-        },
-      }),
+    () => axios(`http://localhost:8080/products/${props.productId}`),
     { enabled: !!props.productId }
   )
 

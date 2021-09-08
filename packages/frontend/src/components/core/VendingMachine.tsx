@@ -12,27 +12,13 @@ function VendingMachine(): JSX.Element {
   const { selectedProduct, setSelectedProduct } = useContext(ProductsContext)
 
   const depositMutation = useMutation(async (amount: number) => {
-    await axios.post(
-      'http://localhost:8080/machine/deposit',
-      { amount },
-      {
-        headers: {
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWF0IjoxNjMxMTAzMzQ4fQ.yqitnSBq20KnHZybDi8dRHCbIEQ0P8bH4bed37Fu7fQ',
-        },
-      }
-    )
+    await axios.post('http://localhost:8080/machine/deposit', { amount })
 
     setDepositedAmount(depositedAmount + amount)
   })
 
   const resetMutation = useMutation(async () => {
-    await axios.post('http://localhost:8080/machine/reset', null, {
-      headers: {
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWF0IjoxNjMxMTAzMzQ4fQ.yqitnSBq20KnHZybDi8dRHCbIEQ0P8bH4bed37Fu7fQ',
-      },
-    })
+    await axios.post('http://localhost:8080/machine/reset')
 
     setDepositedAmount(0)
   })
@@ -41,16 +27,7 @@ function VendingMachine(): JSX.Element {
     if (!selectedProduct) {
       return
     }
-    await axios.post(
-      'http://localhost:8080/machine/buy',
-      { ...selectedProduct },
-      {
-        headers: {
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWF0IjoxNjMxMTAzMzQ4fQ.yqitnSBq20KnHZybDi8dRHCbIEQ0P8bH4bed37Fu7fQ',
-        },
-      }
-    )
+    await axios.post('http://localhost:8080/machine/buy', { ...selectedProduct })
   })
 
   const isBuyEnabled = () => {
