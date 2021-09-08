@@ -1,20 +1,31 @@
 import React from 'react'
-import logo from './logo.svg'
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+
 import './App.css'
+import Buyer from './components/Buyer'
+import Seller from './components/Seller'
 
 function App(): JSX.Element {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Link to="/">Buyer</Link>
+        <br />
+        <Link to="/seller">Seller</Link>
+
+        <br />
+        <br />
+
+        <Switch>
+          <Route path="/seller">
+            <Seller />
+          </Route>
+          <Route path="/">
+            <Buyer />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   )
 }
 
