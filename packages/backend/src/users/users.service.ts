@@ -16,7 +16,7 @@ export class UsersService {
     return this.prisma.user.create({
       data: {
         username: createUserDto.username,
-        password: await this.passwordService.hash(createUserDto.password),
+        password: this.passwordService.hash(createUserDto.password),
         role: createUserDto.role,
       },
     })
@@ -42,14 +42,14 @@ export class UsersService {
     })
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  update(id: number, updateUserDto: UpdateUserDto) {
     return this.prisma.user.update({
       where: {
         id,
       },
       data: {
         username: updateUserDto.username,
-        password: updateUserDto.password ? await this.passwordService.hash(updateUserDto.password) : undefined,
+        password: updateUserDto.password ? this.passwordService.hash(updateUserDto.password) : undefined,
         role: updateUserDto.role,
         deposit: updateUserDto.deposit,
       },
