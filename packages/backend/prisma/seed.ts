@@ -68,7 +68,7 @@ async function main() {
     create: {
       productName: 'Soda',
       amountAvailable: 8,
-      cost: 7,
+      cost: 25,
       sellerId: 1,
     },
   })
@@ -79,7 +79,7 @@ async function main() {
     create: {
       productName: 'Banana',
       amountAvailable: 1,
-      cost: 4,
+      cost: 15,
       sellerId: 2,
     },
   })
@@ -90,7 +90,7 @@ async function main() {
     create: {
       productName: 'Coffee',
       amountAvailable: 2,
-      cost: 12,
+      cost: 30,
       sellerId: 2,
     },
   })
