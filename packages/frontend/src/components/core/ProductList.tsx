@@ -12,7 +12,7 @@ interface ProductListProps {
 
 function ProductList(props: ProductListProps): JSX.Element {
   const { selectedProduct } = useContext(ProductsContext)
-  const { isLoading, isError, data, error } = useQuery('fetchProducts', () => axios('http://localhost:8080/products'))
+  const { isLoading, isError, data, error } = useQuery('fetchProducts', () => axios('/products'))
 
   return (
     <div className="ProductList">

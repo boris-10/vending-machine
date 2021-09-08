@@ -15,17 +15,15 @@ function UserForm(props: UserFormProps): JSX.Element {
     const { id, ...payload } = userModel
 
     if (userModel.id) {
-      return axios.patch(`http://localhost:8080/users/${userModel.id}`, payload)
+      return axios.patch(`/users/${userModel.id}`, payload)
     } else {
-      return axios.post('http://localhost:8080/users', payload)
+      return axios.post('/users', payload)
     }
   })
 
-  const { isLoading, isError, data, error, remove } = useQuery(
-    'fetchUserById',
-    () => axios(`http://localhost:8080/users/${props.userId}`),
-    { enabled: !!props.userId }
-  )
+  const { isLoading, isError, data, error, remove } = useQuery('fetchUserById', () => axios(`/users/${props.userId}`), {
+    enabled: !!props.userId,
+  })
 
   if (!props.userId) {
     remove()

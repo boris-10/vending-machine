@@ -15,15 +15,15 @@ function ProductForm(props: ProductFormProps): JSX.Element {
     const { id, ...payload } = productModel
 
     if (productModel.id) {
-      return axios.patch(`http://localhost:8080/products/${productModel.id}`, payload)
+      return axios.patch(`/products/${productModel.id}`, payload)
     } else {
-      return axios.post('http://localhost:8080/products', payload)
+      return axios.post('/products', payload)
     }
   })
 
   const { isLoading, isError, data, error, remove } = useQuery(
     'fetchProductById',
-    () => axios(`http://localhost:8080/products/${props.productId}`),
+    () => axios(`/products/${props.productId}`),
     { enabled: !!props.productId }
   )
 

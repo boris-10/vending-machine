@@ -12,12 +12,12 @@ function VendingMachine(): JSX.Element {
   const { selectedProduct, setSelectedProduct } = useContext(ProductsContext)
 
   const depositMutation = useMutation(async (amount: number) => {
-    const response = await axios.post('http://localhost:8080/machine/deposit', { amount })
+    const response = await axios.post('/machine/deposit', { amount })
     setDepositedAmount(response.data.deposit)
   })
 
   const resetMutation = useMutation(async () => {
-    await axios.post('http://localhost:8080/machine/reset')
+    await axios.post('/machine/reset')
     setDepositedAmount(0)
   })
 
@@ -25,7 +25,7 @@ function VendingMachine(): JSX.Element {
     if (!selectedProduct) {
       return
     }
-    await axios.post('http://localhost:8080/machine/buy', { ...selectedProduct })
+    await axios.post('/machine/buy', { ...selectedProduct })
   })
 
   const isBuyEnabled = () => {

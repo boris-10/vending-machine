@@ -27,7 +27,7 @@ const AuthContextProvider: FC = ({ children }) => {
   }, [])
 
   const login = async (username: string, password: string) => {
-    const tokenResponse = await axios.post('http://localhost:8080/auth/login', { username, password })
+    const tokenResponse = await axios.post('/auth/login', { username, password })
     localStorage.setItem('jwt', tokenResponse.data.accessToken)
 
     setCurrentUser({ username })

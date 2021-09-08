@@ -9,7 +9,7 @@ interface UserListProps {
 }
 
 function UserList(props: UserListProps): JSX.Element {
-  const { isLoading, isError, data, error } = useQuery('fetchUsers', () => axios('http://localhost:8080/users'))
+  const { isLoading, isError, data, error } = useQuery('fetchUsers', () => axios('/users'))
 
   return (
     <div className="UserList">

@@ -18,6 +18,8 @@ const queryClient = new QueryClient()
 
 axios.interceptors.request.use(
   (request) => {
+    request.baseURL = 'http://localhost:8080'
+
     const token = localStorage.getItem('jwt')?.toString()
     if (token) {
       request.headers['Authorization'] = `Bearer ${token}`
