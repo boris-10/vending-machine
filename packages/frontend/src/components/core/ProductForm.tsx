@@ -11,9 +11,25 @@ interface ProductFormProps {
 }
 
 function ProductForm(props: ProductFormProps): JSX.Element {
-  const createProductMutation = useMutation((productModel: Product) =>
-    axios.post('http://localhost:8080/products', productModel)
-  )
+  const upsertProductMutation = useMutation((productModel: Product) => {
+    const { id, ...payload } = productModel
+
+    if (productModel.id) {
+      return axios.patch(`http://localhost:8080/products/${productModel.id}`, payload, {
+        headers: {
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWF0IjoxNjMxMTAzMzQ4fQ.yqitnSBq20KnHZybDi8dRHCbIEQ0P8bH4bed37Fu7fQ',
+        },
+      })
+    } else {
+      return axios.post('http://localhost:8080/products', payload, {
+        headers: {
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWF0IjoxNjMxMTAzMzQ4fQ.yqitnSBq20KnHZybDi8dRHCbIEQ0P8bH4bed37Fu7fQ',
+        },
+      })
+    }
+  })
 
   const { isLoading, isError, data, error, remove } = useQuery(
     'fetchProductById',
@@ -38,8 +54,8 @@ function ProductForm(props: ProductFormProps): JSX.Element {
     return <span>Error</span>
   }
 
-  const id = data?.data.id ?? 0
-  const sellerId = data?.data.sellerId ?? ''
+  const id = data?.data.id ?? null
+  const sellerId = data?.data.sellerId ?? 1
   const productName = data?.data.productName ?? ''
   const cost = data?.data.cost ?? 0
   const amountAvailable = data?.data.amountAvailable ?? 0
@@ -59,7 +75,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
           return errors
         }}
         onSubmit={(model: Product) => {
-          createProductMutation.mutate(model)
+          upsertProductMutation.mutate(model)
           props.onSubmit()
         }}
       >
