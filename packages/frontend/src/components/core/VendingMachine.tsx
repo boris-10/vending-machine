@@ -54,7 +54,9 @@ function VendingMachine(): JSX.Element {
       Deposit:
       <br />
       {[5, 10, 20, 50, 100].map((n) => (
-        <Button key={n} text={`${n} ¢`} onClick={() => depositMutation.mutate(n)} />
+        <div key={n} className="inline mr-2 mb-4">
+          <Button text={`${n} ¢`} onClick={() => depositMutation.mutate(n)} />
+        </div>
       ))}
       <br />
       <Button text="Reset deposit" isDisabled={depositedAmount === 0} onClick={() => resetMutation.mutate()} />

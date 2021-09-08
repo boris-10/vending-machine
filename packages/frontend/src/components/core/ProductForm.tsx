@@ -65,20 +65,39 @@ function ProductForm(props: ProductFormProps): JSX.Element {
       >
         <Form>
           <label htmlFor="productName">Name</label>
-          <Field id="productName" name="productName" />
+          <Field
+            id="productName"
+            name="productName"
+            className="px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+          />
           <ErrorMessage name="productName" component="span" />
 
           <br />
           <label htmlFor="cost">Cost</label>
-          <Field id="cost" name="cost" type="number" />
+          <Field
+            id="cost"
+            name="cost"
+            type="number"
+            className="px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+          />
           <ErrorMessage name="cost" component="span" />
 
           <br />
           <label htmlFor="amountAvailable">Amount available</label>
-          <Field id="amountAvailable" name="amountAvailable" type="number" />
+          <Field
+            id="amountAvailable"
+            name="amountAvailable"
+            type="number"
+            className="px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+          />
 
           <br />
-          <button type="submit">Submit</button>
+          <button
+            type="submit"
+            className="justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Submit
+          </button>
         </Form>
       </Formik>
     </div>

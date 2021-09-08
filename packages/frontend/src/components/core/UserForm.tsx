@@ -65,20 +65,38 @@ function UserForm(props: UserFormProps): JSX.Element {
       >
         <Form>
           <label htmlFor="username">Username</label>
-          <Field id="username" name="username" />
+          <Field
+            id="username"
+            name="username"
+            className="px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+          />
           <ErrorMessage name="username" component="span" />
 
           <br />
           <label htmlFor="password">Password</label>
-          <Field id="password" name="password" type="password" />
+          <Field
+            id="password"
+            name="password"
+            type="password"
+            className="px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+          />
           <ErrorMessage name="password" component="span" />
 
           <br />
           <label htmlFor="role">Role</label>
-          <Field id="role" name="role" />
+          <Field
+            id="role"
+            name="role"
+            className="px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+          />
 
           <br />
-          <button type="submit">Submit</button>
+          <button
+            type="submit"
+            className="justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Submit
+          </button>
         </Form>
       </Formik>
     </div>
