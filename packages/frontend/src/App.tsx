@@ -7,7 +7,6 @@ import LoginPage from './components/pages/LoginPage'
 import ProductsContextProvider from './providers/ProductsProvider'
 import ProductListPage from './components/pages/ProductListPage'
 import ProductPage from './components/pages/ProductPage'
-import UsersContextProvider from './providers/UsersProvider'
 import UserListPage from './components/pages/UserListPage'
 import UserPage from './components/pages/UserPage'
 import VendingMachinePage from './components/pages/VendingMachinePage'
@@ -49,14 +48,10 @@ function App(): JSX.Element {
               <UserListPage />
             </Route>
             <Route path="/user/:userId/edit">
-              <UsersContextProvider>
-                <UserPage />
-              </UsersContextProvider>
+              <UserPage />
             </Route>
             <Route path="/user/create">
-              <UsersContextProvider>
-                <UserPage />
-              </UsersContextProvider>
+              <UserPage />
             </Route>
             <Route path="/vending-machine">
               <VendingMachinePage />
