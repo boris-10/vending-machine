@@ -8,6 +8,7 @@ import Button from '../atoms/Button'
 
 function VendingMachine(): JSX.Element {
   const [depositedAmount, setDepositedAmount] = useState(0)
+  const [selectedProductAmount, setSelectedProductAmount] = useState(1)
   const { selectedProduct, setSelectedProduct } = useContext(ProductsContext)
 
   const depositMutation = useMutation(async (amount: number) => {
@@ -52,6 +53,14 @@ function VendingMachine(): JSX.Element {
     )
   })
 
+  const isBuyEnabled = () => {
+    return (
+      selectedProduct &&
+      selectedProduct.amountAvailable >= selectedProductAmount &&
+      depositedAmount >= selectedProductAmount * selectedProduct.cost
+    )
+  }
+
   return (
     <div>
       <ProductList onSelect={(product) => setSelectedProduct(product)} />
@@ -68,13 +77,16 @@ function VendingMachine(): JSX.Element {
       <br />
       Deposited: <b>{depositedAmount}</b> ¢
       <br />
+      <input
+        type="number"
+        min="1"
+        value={selectedProductAmount}
+        onChange={(e) => setSelectedProductAmount(Number(e.target.value))}
+      />
+      <br />
       Selected product: {selectedProduct ? <b>{selectedProduct.productName}</b> : <i>[none]</i>}
       <br />
-      <Button
-        isDisabled={!selectedProduct || depositedAmount < selectedProduct.cost}
-        onClick={() => buyMutation.mutate()}
-        text="Buy"
-      />
+      <Button isDisabled={!isBuyEnabled()} onClick={() => buyMutation.mutate()} text="Buy" />
     </div>
   )
 }
