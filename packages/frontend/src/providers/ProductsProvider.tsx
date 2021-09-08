@@ -1,41 +1,60 @@
 import React, { createContext, useState, FC } from 'react'
 import Product from '../models/Product'
 
-type ProductListContextState = {
+type ProductsContextState = {
   products: Product[]
-  addProduct: (product: Product) => void
+  findProductById: (id: string) => Product | undefined
+  upsertProduct: (product: Product) => void
+  selectedProduct: Product | null
+  setSelectedProduct: (product: Product) => void
 }
 
-const contextDefaultValues: ProductListContextState = {
+const contextDefaultValues: ProductsContextState = {
   products: [
-    { id: 'product1', sellerId: 'seller1', name: 'Chocolate', amountAvailable: 100, cost: 20 },
-    { id: 'product2', sellerId: 'seller2', name: 'Coke', amountAvailable: 20, cost: 15 },
-    { id: 'product3', sellerId: 'seller3', name: 'Juice', amountAvailable: 30, cost: 10 },
-    { id: 'product4', sellerId: 'seller4', name: 'Sandwich', amountAvailable: 10, cost: 80 },
-    { id: 'product5', sellerId: 'seller5', name: 'Milk', amountAvailable: 50, cost: 5 },
+    { id: '1', sellerId: 'seller-1', name: 'Chocolate', amountAvailable: 100, cost: 20 },
+    { id: '2', sellerId: 'seller-2', name: 'Coke', amountAvailable: 20, cost: 15 },
+    { id: '3', sellerId: 'seller-3', name: 'Juice', amountAvailable: 30, cost: 10 },
+    { id: '4', sellerId: 'seller-4', name: 'Sandwich', amountAvailable: 10, cost: 80 },
+    { id: '5', sellerId: 'seller-5', name: 'Milk', amountAvailable: 50, cost: 5 },
   ],
-  addProduct: () => {
-    null
-  },
+  findProductById: () => undefined,
+  upsertProduct: () => undefined,
+  selectedProduct: null,
+  setSelectedProduct: () => undefined,
 }
 
-export const ProductListContext = createContext<ProductListContextState>(contextDefaultValues)
+export const ProductsContext = createContext<ProductsContextState>(contextDefaultValues)
 
-const ProductListContextProvider: FC = ({ children }) => {
+const ProductsContextProvider: FC = ({ children }) => {
   const [products, setProducts] = useState<Product[]>(contextDefaultValues.products)
+  const [selectedProduct, setSelectedProduct] = useState({} as Product)
 
-  const addProduct = (newProduct: Product) => setProducts((products) => [...products, newProduct])
+  const upsertProduct = (product: Product) => {
+    if (product.id) {
+      // POST
+    } else {
+      // PATCH
+    }
+    setProducts((products) => [...products, product])
+  }
+
+  const findProductById = (id: string) => {
+    return products.find((product) => product.id === id)
+  }
 
   return (
-    <ProductListContext.Provider
+    <ProductsContext.Provider
       value={{
         products,
-        addProduct,
+        upsertProduct,
+        selectedProduct,
+        setSelectedProduct,
+        findProductById,
       }}
     >
       {children}
-    </ProductListContext.Provider>
+    </ProductsContext.Provider>
   )
 }
 
-export default ProductListContextProvider
+export default ProductsContextProvider

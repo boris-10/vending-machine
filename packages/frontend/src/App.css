@@ -37,7 +37,7 @@
   }
 }
 
-.ProductList {
+.ProductList, .UserList {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -53,5 +53,13 @@
   cursor: pointer;
 }
 .ProductItem:hover:not(.ProductItem--selected) {
+  background-color: whitesmoke;
+}
+
+.UserItem {
+  width: 400px;
+}
+.UserItem:hover {
+  cursor: pointer;
   background-color: whitesmoke;
 }
