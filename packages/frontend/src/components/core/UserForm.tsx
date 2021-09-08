@@ -11,7 +11,25 @@ interface UserFormProps {
 }
 
 function UserForm(props: UserFormProps): JSX.Element {
-  const createUserMutation = useMutation((userModel: User) => axios.post('http://localhost:8080/users', userModel))
+  const upsertUserMutation = useMutation((userModel: User) => {
+    const { id, ...payload } = userModel
+
+    if (userModel.id) {
+      return axios.patch(`http://localhost:8080/users/${userModel.id}`, payload, {
+        headers: {
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWF0IjoxNjMxMTAzMzQ4fQ.yqitnSBq20KnHZybDi8dRHCbIEQ0P8bH4bed37Fu7fQ',
+        },
+      })
+    } else {
+      return axios.post('http://localhost:8080/users', payload, {
+        headers: {
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWF0IjoxNjMxMTAzMzQ4fQ.yqitnSBq20KnHZybDi8dRHCbIEQ0P8bH4bed37Fu7fQ',
+        },
+      })
+    }
+  })
 
   const { isLoading, isError, data, error, remove } = useQuery(
     'fetchUserById',
@@ -36,6 +54,7 @@ function UserForm(props: UserFormProps): JSX.Element {
     return <span>Error</span>
   }
 
+  const id = data?.data.id ?? null
   const username = data?.data.username ?? ''
   const password = data?.data.password ?? ''
   const role = data?.data.role ?? UserRole.Buyer
@@ -46,7 +65,7 @@ function UserForm(props: UserFormProps): JSX.Element {
 
       <Formik
         enableReinitialize
-        initialValues={{ username, password, role }}
+        initialValues={{ id, username, password, role }}
         validate={(model: User) => {
           const errors: { username?: string; password?: string } = {}
           if (!model.username) {
@@ -58,7 +77,7 @@ function UserForm(props: UserFormProps): JSX.Element {
           return errors
         }}
         onSubmit={(model: User) => {
-          createUserMutation.mutate(model)
+          upsertUserMutation.mutate(model)
           props.onSubmit()
         }}
       >
