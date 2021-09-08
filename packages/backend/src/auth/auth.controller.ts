@@ -1,6 +1,9 @@
-import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common'
+import { Controller, Post, Body, UnauthorizedException, Get, UseGuards } from '@nestjs/common'
 import { AuthService } from './auth.service'
+import { CurrentUser } from './current-user.decorator'
 import { CredentialsDto } from './dto/credentials.dto'
+import { UserInfo } from './entity/user-info.entity'
+import { JwtAuthGuard } from './jwt-auth.guard'
 
 @Controller('auth')
 export class AuthController {
@@ -16,5 +19,11 @@ export class AuthController {
     const accessToken = await this.authService.generateAccessToken(user.username)
 
     return { accessToken }
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  async me(@CurrentUser() userInfo: UserInfo) {
+    return userInfo
   }
 }
