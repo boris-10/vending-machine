@@ -25,7 +25,7 @@ function VendingMachine(): JSX.Element {
     if (!selectedProduct) {
       return
     }
-    await axios.post('/machine/buy', { ...selectedProduct })
+    await axios.post('/machine/buy', { productId: selectedProduct.id, amount: selectedProductAmount })
   })
 
   const isBuyEnabled = () => {
