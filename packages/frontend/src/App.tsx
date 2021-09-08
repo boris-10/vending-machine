@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import axios from 'axios'
 
 import './App.css'
+import { AuthContext } from './providers/AuthProvider'
 import LoginPage from './components/pages/LoginPage'
 import ProductsContextProvider from './providers/ProductsProvider'
 import ProductListPage from './components/pages/ProductListPage'
@@ -29,19 +30,21 @@ axios.interceptors.request.use(
 )
 
 function App(): JSX.Element {
+  const { currentUser } = useContext(AuthContext)
   const isLoggedIn = Boolean(localStorage.getItem('jwt'))
 
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
         <div className="App">
-          {isLoggedIn && <Header />}
+          {!!currentUser && <Header />}
           <br />
 
           {!isLoggedIn && <Redirect to="/login" />}
 
           <Switch>
             <Route path="/login">
+              {isLoggedIn && <Redirect to="/" />}
               <LoginPage />
             </Route>
             <Route path="/products">

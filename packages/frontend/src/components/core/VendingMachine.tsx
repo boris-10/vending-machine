@@ -12,14 +12,12 @@ function VendingMachine(): JSX.Element {
   const { selectedProduct, setSelectedProduct } = useContext(ProductsContext)
 
   const depositMutation = useMutation(async (amount: number) => {
-    await axios.post('http://localhost:8080/machine/deposit', { amount })
-
-    setDepositedAmount(depositedAmount + amount)
+    const response = await axios.post('http://localhost:8080/machine/deposit', { amount })
+    setDepositedAmount(response.data.deposit)
   })
 
   const resetMutation = useMutation(async () => {
     await axios.post('http://localhost:8080/machine/reset')
-
     setDepositedAmount(0)
   })
 
@@ -50,7 +48,7 @@ function VendingMachine(): JSX.Element {
       <Button text="50 ¢" onClick={() => depositMutation.mutate(50)} />
       <Button text="100 ¢" onClick={() => depositMutation.mutate(100)} />
       <br />
-      <Button text="Return money" isDisabled={depositedAmount === 0} onClick={() => resetMutation.mutate()} />
+      <Button text="Reset deposit" isDisabled={depositedAmount === 0} onClick={() => resetMutation.mutate()} />
       <br />
       Deposited: <b>{depositedAmount}</b> ¢
       <br />

@@ -5,7 +5,7 @@ import { AuthContext } from '../../providers/AuthProvider'
 import Button from '../atoms/Button'
 
 function Header(): JSX.Element {
-  const { logout } = useContext(AuthContext)
+  const { logout, currentUser } = useContext(AuthContext)
   const history = useHistory()
 
   const onLogout = () => {
@@ -20,10 +20,10 @@ function Header(): JSX.Element {
         <Link to="/products">PRODUCTS</Link>
         <Link to="/users">USERS</Link>
       </div>
-
-      <span>TODO username</span>
-
-      <Button onClick={onLogout} text="Logout" />
+      <div>
+        <span>{currentUser?.username}</span>
+        <Button onClick={onLogout} text="Logout" />
+      </div>
     </div>
   )
 }
