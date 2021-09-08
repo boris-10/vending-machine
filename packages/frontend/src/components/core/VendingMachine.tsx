@@ -6,14 +6,20 @@ import ProductList from './ProductList'
 import { ProductsContext } from '../../providers/ProductsProvider'
 import Button from '../atoms/Button'
 
+interface CoinChange {
+  coin: number
+  count: number
+}
+
 function VendingMachine(): JSX.Element {
   const [depositedAmount, setDepositedAmount] = useState(0)
   const [selectedProductAmount, setSelectedProductAmount] = useState(1)
+  const [coinChange, setCoinChange] = useState<CoinChange[]>([])
   const { selectedProduct, setSelectedProduct } = useContext(ProductsContext)
 
   const depositMutation = useMutation(async (amount: number) => {
-    const response = await axios.post('/machine/deposit', { amount })
-    setDepositedAmount(response.data.deposit)
+    const { data } = await axios.post('/machine/deposit', { amount })
+    setDepositedAmount(data.deposit)
   })
 
   const resetMutation = useMutation(async () => {
@@ -25,7 +31,12 @@ function VendingMachine(): JSX.Element {
     if (!selectedProduct) {
       return
     }
-    await axios.post('/machine/buy', { productId: selectedProduct.id, amount: selectedProductAmount })
+    const { data }: { data: CoinChange[] } = await axios.post('/machine/buy', {
+      productId: selectedProduct.id,
+      amount: selectedProductAmount,
+    })
+    setCoinChange(data.filter((change) => change.coin !== 0))
+    setDepositedAmount(0)
   })
 
   const isBuyEnabled = () => {
@@ -42,11 +53,9 @@ function VendingMachine(): JSX.Element {
       <br />
       Deposit:
       <br />
-      <Button text="5 ¢" onClick={() => depositMutation.mutate(5)} />
-      <Button text="10 ¢" onClick={() => depositMutation.mutate(10)} />
-      <Button text="20 ¢" onClick={() => depositMutation.mutate(20)} />
-      <Button text="50 ¢" onClick={() => depositMutation.mutate(50)} />
-      <Button text="100 ¢" onClick={() => depositMutation.mutate(100)} />
+      {[5, 10, 20, 50, 100].map((n) => (
+        <Button key={n} text={`${n} ¢`} onClick={() => depositMutation.mutate(n)} />
+      ))}
       <br />
       <Button text="Reset deposit" isDisabled={depositedAmount === 0} onClick={() => resetMutation.mutate()} />
       <br />
@@ -62,6 +71,12 @@ function VendingMachine(): JSX.Element {
       Selected product: {selectedProduct ? <b>{selectedProduct.productName}</b> : <i>[none]</i>}
       <br />
       <Button isDisabled={!isBuyEnabled()} onClick={() => buyMutation.mutate()} text="Buy" />
+      <br />
+      {coinChange.map(({ coin, count }) => (
+        <div key={coin}>
+          Coin: {coin}¢ x {count}
+        </div>
+      ))}
     </div>
   )
 }
