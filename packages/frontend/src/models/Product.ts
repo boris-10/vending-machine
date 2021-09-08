@@ -1,7 +1,7 @@
 export default interface Product {
-  id?: string
+  id?: number
   sellerId: string
   amountAvailable: number
   cost: number
-  name: string
+  productName: string
 }

@@ -1,12 +1,12 @@
-enum UserRole {
-  Buyer,
-  Seller,
+export enum UserRole {
+  Buyer = 'buyer',
+  Seller = 'seller',
 }
 
-export default interface Product {
-  id?: string
+export default interface User {
+  id?: number
   username: string
   password: string
-  deposit: number
+  deposit?: number
   role: UserRole
 }

@@ -1,43 +1,65 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
+import axios from 'axios'
+import { useMutation, useQuery } from 'react-query'
 
-import { UsersContext } from '../../providers/UsersProvider'
-import User from '../../models/User'
+import User, { UserRole } from '../../models/User'
 
 interface UserFormProps {
-  user?: User
+  userId?: number
   onSubmit: () => void
 }
 
 function UserForm(props: UserFormProps): JSX.Element {
-  const { upsertUser } = useContext(UsersContext)
+  const createUserMutation = useMutation((userModel: User) => axios.post('http://localhost:8080/users', userModel))
 
-  const username = props.user?.username || ''
-  const password = props.user?.password || ''
-  const deposit = props.user?.deposit || 0
-  const role = props.user?.role || 0
+  const { isLoading, isError, data, error, remove } = useQuery(
+    'fetchUserById',
+    () =>
+      axios(`http://localhost:8080/users/${props.userId}`, {
+        headers: {
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWF0IjoxNjMxMTAzMzQ4fQ.yqitnSBq20KnHZybDi8dRHCbIEQ0P8bH4bed37Fu7fQ',
+        },
+      }),
+    { enabled: !!props.userId }
+  )
 
-  const submit = (userModel: User) => {
-    upsertUser(userModel)
-    props.onSubmit()
+  if (!props.userId) {
+    remove()
   }
+
+  if (isLoading) {
+    return <span>Loading...</span>
+  }
+  if (isError) {
+    return <span>Error</span>
+  }
+
+  const username = data?.data.username ?? ''
+  const password = data?.data.password ?? ''
+  const role = data?.data.role ?? UserRole.Buyer
 
   return (
     <div>
+      <h2>{data?.data ? `Edit user - ${data?.data.username}` : 'Create user'}</h2>
+
       <Formik
-        initialValues={{ username, password, deposit, role }}
-        validate={(values: User) => {
+        enableReinitialize
+        initialValues={{ username, password, role }}
+        validate={(model: User) => {
           const errors: { username?: string; password?: string } = {}
-          if (!values.username) {
+          if (!model.username) {
             errors.username = 'Required'
           }
-          if (!values.password) {
+          if (!model.password) {
             errors.password = 'Required'
           }
           return errors
         }}
-        onSubmit={(values: User) => {
-          submit(values)
+        onSubmit={(model: User) => {
+          createUserMutation.mutate(model)
+          props.onSubmit()
         }}
       >
         <Form>
@@ -51,12 +73,8 @@ function UserForm(props: UserFormProps): JSX.Element {
           <ErrorMessage name="password" component="span" />
 
           <br />
-          <label htmlFor="deposit">Deposit</label>
-          <Field id="deposit" name="deposit" type="number" />
-
-          <br />
           <label htmlFor="role">Role</label>
-          <Field id="role" name="role" type="number" />
+          <Field id="role" name="role" />
 
           <br />
           <button type="submit">Submit</button>

@@ -45,7 +45,7 @@ function VendingMachine(): JSX.Element {
       <br />
       Deposited: <b>{depositedAmount}</b> ¢
       <br />
-      Selected product: {selectedProduct ? <b>{selectedProduct.name}</b> : <i>[none]</i>}
+      Selected product: {selectedProduct ? <b>{selectedProduct.productName}</b> : <i>[none]</i>}
       <br />
       <Button isDisabled={!selectedProduct || depositedAmount < selectedProduct.cost} onClick={buyProduct} text="Buy" />
     </div>

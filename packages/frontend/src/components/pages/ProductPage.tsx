@@ -1,15 +1,11 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 
 import ProductForm from '../core/ProductForm'
-import { ProductsContext } from '../../providers/ProductsProvider'
 
 function ProductPage(): JSX.Element {
   const history = useHistory()
-  const { findProductById } = useContext(ProductsContext)
   const { productId } = useParams<{ productId: string }>()
-
-  const product = findProductById(productId)
 
   const onSubmit = () => {
     history.push('/products')
@@ -17,9 +13,11 @@ function ProductPage(): JSX.Element {
 
   return (
     <div>
-      <h2>{product ? `Edit product - ${product.name}` : 'Create product'}</h2>
-
-      {product ? <ProductForm product={product} onSubmit={onSubmit} /> : <ProductForm onSubmit={onSubmit} />}
+      {productId ? (
+        <ProductForm productId={Number(productId)} onSubmit={onSubmit} />
+      ) : (
+        <ProductForm onSubmit={onSubmit} />
+      )}
     </div>
   )
 }

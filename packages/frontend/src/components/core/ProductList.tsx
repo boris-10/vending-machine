@@ -1,4 +1,6 @@
 import React, { useContext } from 'react'
+import axios from 'axios'
+import { useQuery } from 'react-query'
 
 import Product from '../../models/Product'
 import { ProductsContext } from '../../providers/ProductsProvider'
@@ -9,13 +11,22 @@ interface ProductListProps {
 }
 
 function ProductList(props: ProductListProps): JSX.Element {
-  const { products, selectedProduct } = useContext(ProductsContext)
+  const { selectedProduct } = useContext(ProductsContext)
+
+  const { isLoading, isError, data, error } = useQuery('fetchProducts', () =>
+    axios('http://localhost:8080/products', {
+      headers: {
+        Authorization:
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWF0IjoxNjMxMTAzMzQ4fQ.yqitnSBq20KnHZybDi8dRHCbIEQ0P8bH4bed37Fu7fQ',
+      },
+    })
+  )
 
   return (
     <div className="ProductList">
-      {products.map((product, i) => (
+      {data?.data.map((product: Product) => (
         <ProductItem
-          key={i}
+          key={product.id}
           product={product}
           isSelected={product.id === selectedProduct?.id}
           onClick={() => {

@@ -10,7 +10,7 @@ interface ProductItemProps {
 function ProductItem(props: ProductItemProps): JSX.Element {
   return (
     <div onClick={props.onClick} className={`ProductItem ${props.isSelected && 'ProductItem--selected'}`}>
-      <b>{props.product.name}</b> ({props.product.amountAvailable}): <b>{props.product.cost}</b> ¢
+      <b>{props.product.productName}</b> ({props.product.amountAvailable}): <b>{props.product.cost}</b> ¢
     </div>
   )
 }

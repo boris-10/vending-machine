@@ -1,4 +1,6 @@
 import React from 'react'
+import axios from 'axios'
+import { useMutation } from 'react-query'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 
 interface LoginModel {
@@ -7,26 +9,27 @@ interface LoginModel {
 }
 
 function LoginForm(): JSX.Element {
-  const login = (loginModel: LoginModel) => {
-    console.log(loginModel.username)
-  }
+  const loginMutation = useMutation((loginModel: LoginModel) =>
+    axios.post('http://localhost:8080/auth/login', loginModel)
+  )
 
   return (
     <div>
       <Formik
+        enableReinitialize
         initialValues={{ username: '', password: '' }}
-        validate={(values) => {
+        validate={(model) => {
           const errors: { username?: string; password?: string } = {}
-          if (!values.username) {
+          if (!model.username) {
             errors.username = 'Required'
           }
-          if (!values.password) {
+          if (!model.password) {
             errors.password = 'Required'
           }
           return errors
         }}
-        onSubmit={(values) => {
-          login(values)
+        onSubmit={(model) => {
+          loginMutation.mutate(model)
         }}
       >
         <Form>

@@ -1,50 +1,72 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
+import axios from 'axios'
+import { useMutation, useQuery } from 'react-query'
 
-import { ProductsContext } from '../../providers/ProductsProvider'
 import Product from '../../models/Product'
 
 interface ProductFormProps {
-  product?: Product
+  productId?: number
   onSubmit: () => void
 }
 
 function ProductForm(props: ProductFormProps): JSX.Element {
-  const { upsertProduct } = useContext(ProductsContext)
+  const createProductMutation = useMutation((productModel: Product) =>
+    axios.post('http://localhost:8080/products', productModel)
+  )
 
-  const id = '1'
-  const sellerId = '1'
-  const name = props.product?.name ?? ''
-  const cost = props.product?.cost ?? 0
-  const amountAvailable = props.product?.amountAvailable || 0
+  const { isLoading, isError, data, error, remove } = useQuery(
+    'fetchProductById',
+    () =>
+      axios(`http://localhost:8080/products/${props.productId}`, {
+        headers: {
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWF0IjoxNjMxMTAzMzQ4fQ.yqitnSBq20KnHZybDi8dRHCbIEQ0P8bH4bed37Fu7fQ',
+        },
+      }),
+    { enabled: !!props.productId }
+  )
 
-  const submit = (productModel: Product) => {
-    upsertProduct({
-      ...productModel,
-      sellerId: 'TODO',
-    })
-    props.onSubmit()
+  if (!props.productId) {
+    remove()
   }
+
+  if (isLoading) {
+    return <span>Loading...</span>
+  }
+  if (isError) {
+    return <span>Error</span>
+  }
+
+  const id = data?.data.id ?? 0
+  const sellerId = data?.data.sellerId ?? ''
+  const productName = data?.data.productName ?? ''
+  const cost = data?.data.cost ?? 0
+  const amountAvailable = data?.data.amountAvailable ?? 0
 
   return (
     <div>
+      <h2>{props.productId ? `Edit product - ${productName}` : 'Create product'}</h2>
+
       <Formik
-        initialValues={{ id, sellerId, name, cost, amountAvailable }}
-        validate={(values: Product) => {
+        enableReinitialize
+        initialValues={{ id, sellerId, productName, cost, amountAvailable }}
+        validate={(model: Product) => {
           const errors: { name?: string } = {}
-          if (!values.name) {
+          if (!model.productName) {
             errors.name = 'Required'
           }
           return errors
         }}
-        onSubmit={(values: Product) => {
-          submit(values)
+        onSubmit={(model: Product) => {
+          createProductMutation.mutate(model)
+          props.onSubmit()
         }}
       >
         <Form>
-          <label htmlFor="name">Name</label>
-          <Field id="name" name="name" />
-          <ErrorMessage name="name" component="span" />
+          <label htmlFor="productName">Name</label>
+          <Field id="productName" name="productName" />
+          <ErrorMessage name="productName" component="span" />
 
           <br />
           <label htmlFor="cost">Cost</label>
