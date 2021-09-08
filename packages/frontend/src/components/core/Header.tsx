@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useHistory, Link } from 'react-router-dom'
 
+import { AuthContext } from '../../providers/AuthProvider'
 import Button from '../atoms/Button'
 
 function Header(): JSX.Element {
+  const { logout } = useContext(AuthContext)
   const history = useHistory()
 
-  const logout = () => {
-    localStorage.removeItem('jwt')
+  const onLogout = () => {
+    logout()
     history.push('/login')
   }
 
@@ -21,7 +23,7 @@ function Header(): JSX.Element {
 
       <span>TODO username</span>
 
-      <Button onClick={logout} text="Logout" />
+      <Button onClick={onLogout} text="Logout" />
     </div>
   )
 }

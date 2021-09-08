@@ -1,7 +1,8 @@
-import React from 'react'
-import axios from 'axios'
+import React, { useContext } from 'react'
 import { useMutation } from 'react-query'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
+
+import { AuthContext } from '../../providers/AuthProvider'
 
 interface LoginModel {
   username: string
@@ -13,11 +14,11 @@ interface LoginFormProps {
 }
 
 function LoginForm(props: LoginFormProps): JSX.Element {
+  const { login } = useContext(AuthContext)
+
   const loginMutation = useMutation(async (loginModel: LoginModel) => {
     try {
-      const response = await axios.post('http://localhost:8080/auth/login', loginModel)
-      localStorage.setItem('jwt', response.data.accessToken)
-
+      await login(loginModel.username, loginModel.password)
       props.onLoginSuccess()
     } catch (error) {
       throw error
