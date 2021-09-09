@@ -12,12 +12,13 @@ function ProductItem(props: ProductItemProps): JSX.Element {
     <div
       onClick={props.onClick}
       className={`my-2 border p-2 border-gray-300 rounded-sm cursor-pointer ${
-        props.isSelected ? 'bg-blue-400' : 'hover:bg-gray-200'
+        props.isSelected ? 'bg-indigo-300' : 'hover:bg-gray-200'
       }`}
     >
       <div className="flex justify-between">
         <span>
-          <b>{props.product.productName}</b>&nbsp;({props.product.amountAvailable})
+          <b>{props.product.productName}</b>&nbsp;
+          <span className="text-sm">(x{props.product.amountAvailable})</span>
         </span>
         <span>
           <b>{props.product.cost}</b> ¢

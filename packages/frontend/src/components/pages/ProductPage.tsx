@@ -7,16 +7,16 @@ function ProductPage(): JSX.Element {
   const history = useHistory()
   const { productId } = useParams<{ productId: string }>()
 
-  const onSubmit = () => {
+  const redirectToProducts = () => {
     history.push('/products')
   }
 
   return (
     <div>
       {productId ? (
-        <ProductForm productId={Number(productId)} onSubmit={onSubmit} />
+        <ProductForm productId={Number(productId)} onSubmit={redirectToProducts} onDelete={redirectToProducts} />
       ) : (
-        <ProductForm onSubmit={onSubmit} />
+        <ProductForm onSubmit={redirectToProducts} />
       )}
     </div>
   )

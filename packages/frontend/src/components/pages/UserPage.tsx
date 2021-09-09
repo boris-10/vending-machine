@@ -7,12 +7,18 @@ function UserPage(): JSX.Element {
   const history = useHistory()
   const { userId } = useParams<{ userId: string }>()
 
-  const onSubmit = () => {
+  const redirectToUsers = () => {
     history.push('/users')
   }
 
   return (
-    <div>{userId ? <UserForm userId={Number(userId)} onSubmit={onSubmit} /> : <UserForm onSubmit={onSubmit} />}</div>
+    <div>
+      {userId ? (
+        <UserForm userId={Number(userId)} onSubmit={redirectToUsers} onDelete={redirectToUsers} />
+      ) : (
+        <UserForm onSubmit={redirectToUsers} />
+      )}
+    </div>
   )
 }
 

@@ -90,13 +90,17 @@ function VendingMachine(): JSX.Element {
         Deposited: <b>{depositedAmount}</b> ¢
       </h2>
       <Button isDisabled={!isBuyEnabled()} onClick={() => buyMutation.mutate()} text="Buy" variation="success" />
-      <div className="my-4">
-        {coinChange.map(({ coin, count }) => (
-          <div key={coin}>
-            Coin: {coin}¢ x {count}
-          </div>
-        ))}
-      </div>
+
+      {coinChange.length > 0 && (
+        <div className="mt-6">
+          <h2 className="mb-2">Returned change:</h2>
+          {coinChange.map(({ coin, count }) => (
+            <div key={coin}>
+              <b>{coin}</b>¢ (<b>{count}</b>)
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
