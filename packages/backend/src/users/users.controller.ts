@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  UseInterceptors,
+  ParseIntPipe,
+} from '@nestjs/common'
 import { Throttle, ThrottlerGuard } from '@nestjs/throttler'
 import { UsersService } from './users.service'
 import { CreateUserDto } from './dto/create-user.dto'
@@ -32,23 +43,23 @@ export class UsersController {
   @Roles('seller')
   @UseGuards(RoleGuard)
   @UseGuards(JwtAuthGuard)
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id)
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.findOne(id)
   }
 
   @Patch(':id')
   @Roles('seller', 'buyer')
   @UseGuards(RoleGuard)
   @UseGuards(JwtAuthGuard)
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto)
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(id, updateUserDto)
   }
 
   @Delete(':id')
   @Roles('seller')
   @UseGuards(RoleGuard)
   @UseGuards(JwtAuthGuard)
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id)
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.remove(id)
   }
 }
