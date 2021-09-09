@@ -16,7 +16,7 @@ import { RoleGuard } from '../auth/role.guard'
 import { ProductsService } from './products.service'
 import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
-import { CurrentUser } from 'src/auth/current-user.decorator'
+import { CurrentUser } from '../auth/current-user.decorator'
 
 @Controller('products')
 @UseGuards(RoleGuard)

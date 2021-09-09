@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { PrismaService } from 'nestjs-prisma'
-import { PriceService } from 'src/price/price.service'
-import { ProductsService } from 'src/products/products.service'
-import { UsersService } from 'src/users/users.service'
+import { PriceService } from '../price/price.service'
+import { ProductsService } from '../products/products.service'
+import { UsersService } from '../users/users.service'
 
 @Injectable()
 export class MachineService {
@@ -22,6 +22,10 @@ export class MachineService {
   async buy(userId: number, productId: number, amount: number) {
     const user = await this.usersService.findOne(userId)
     const product = await this.productsService.findOne(productId)
+
+    if (!product) {
+      throw new BadRequestException("Product doesn't exist.")
+    }
 
     if (amount > product.amountAvailable) {
       throw new BadRequestException('Not enough items in vending machine. Try reducing buy amount.')

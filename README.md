@@ -8,7 +8,7 @@ This is a monorepo containing both frontend and backend code. Both packages are 
 
 ### Frontend
 
-Using [React](https://reactjs.org/) and created with `create-react-app`.
+Using [React](https://reactjs.org/) and created with `create-react-app`. Tailwind added as a CSS library. 
 
 ### Backend
 
@@ -47,3 +47,11 @@ npm run dev:backend
 ### VS Code
 
 If you use VS Code as IDE there are tasks and extension set up for better dev flow.
+
+## Testing
+
+```bash
+cd packages/backend
+npm run test
+npm run test:e2e
+```

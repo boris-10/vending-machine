@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { COIN_DENOMINATIONS, COIN_DENOMINATIONS_KEY } from 'src/price/price.constants'
+import { COIN_DENOMINATIONS, COIN_DENOMINATIONS_KEY } from './price.constants'
 import { PriceService } from './price.service'
 
 @Module({
