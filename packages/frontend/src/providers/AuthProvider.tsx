@@ -21,6 +21,10 @@ const AuthContextProvider: FC = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<Partial<User> | null>(null)
 
   useEffect(() => {
+    if (location.pathname === '/login') {
+      return
+    }
+
     ;(async () => {
       const { data: user } = await axios('/auth/me')
       setCurrentUser(user)
