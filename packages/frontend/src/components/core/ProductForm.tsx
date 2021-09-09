@@ -1,17 +1,21 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import axios from 'axios'
 import { useMutation, useQuery } from 'react-query'
 
+import { AuthContext } from '../../providers/AuthProvider'
 import Product from '../../models/Product'
 import Button from '../atoms/Button'
 
 interface ProductFormProps {
   productId?: number
   onSubmit: () => void
+  onDelete?: () => void
 }
 
 function ProductForm(props: ProductFormProps): JSX.Element {
+  const { currentUser } = useContext(AuthContext)
+
   const upsertProductMutation = useMutation((productModel: Product) => {
     const { id, ...payload } = productModel
 
@@ -22,6 +26,8 @@ function ProductForm(props: ProductFormProps): JSX.Element {
     }
   })
 
+  const deleteProductMutation = useMutation(() => axios.delete(`/products/${id}`))
+
   const { data, remove } = useQuery('fetchProductById', () => axios(`/products/${props.productId}`), {
     enabled: !!props.productId,
   })
@@ -31,7 +37,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
   }
 
   const id = data?.data.id ?? null
-  const sellerId = data?.data.sellerId ?? 1
+  const sellerId = currentUser?.id ?? 300
   const productName = data?.data.productName ?? ''
   const cost = data?.data.cost ?? 0
   const amountAvailable = data?.data.amountAvailable ?? 0
@@ -103,6 +109,18 @@ function ProductForm(props: ProductFormProps): JSX.Element {
             </div>
 
             <Button type="submit" text="Submit" className="w-full mt-4" variation="success" />
+
+            {id && (
+              <Button
+                onClick={() => {
+                  deleteProductMutation.mutate()
+                  props.onDelete?.()
+                }}
+                text="Delete product"
+                className="w-full mt-4"
+                variation="warning"
+              />
+            )}
           </Form>
         </Formik>
       </div>

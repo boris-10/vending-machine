@@ -9,6 +9,7 @@ import Button from '../atoms/Button'
 interface UserFormProps {
   userId?: number
   onSubmit: () => void
+  onDelete?: () => void
 }
 
 function UserForm(props: UserFormProps): JSX.Element {
@@ -21,6 +22,8 @@ function UserForm(props: UserFormProps): JSX.Element {
       return axios.post('/users', payload)
     }
   })
+
+  const deleteUserMutation = useMutation(() => axios.delete(`/users/${id}`))
 
   const { data, remove } = useQuery('fetchUserById', () => axios(`/users/${props.userId}`), {
     enabled: !!props.userId,
@@ -106,6 +109,18 @@ function UserForm(props: UserFormProps): JSX.Element {
             </div>
 
             <Button type="submit" text="Submit" className="w-full mt-4" variation="success" />
+
+            {id && (
+              <Button
+                onClick={() => {
+                  deleteUserMutation.mutate(id)
+                  props.onDelete?.()
+                }}
+                text="Delete user"
+                className="w-full mt-4"
+                variation="warning"
+              />
+            )}
           </Form>
         </Formik>
       </div>
