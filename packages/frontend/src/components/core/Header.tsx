@@ -21,6 +21,10 @@ function Header(): JSX.Element {
   const history = useHistory()
 
   history.listen(({ pathname }) => {
+    if (!currentUser?.id) {
+      return
+    }
+
     setCurrentRoute(pathname)
   })
 
