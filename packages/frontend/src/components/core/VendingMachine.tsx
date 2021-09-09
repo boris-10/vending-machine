@@ -17,6 +17,7 @@ function VendingMachine(): JSX.Element {
   const { currentUser } = useContext(AuthContext)
   const [depositedAmount, setDepositedAmount] = useState(0)
   const [selectedProductAmount, setSelectedProductAmount] = useState(1)
+  const [productListRenderKey, setProductListRenderKey] = useState(0)
   const [coinChange, setCoinChange] = useState<CoinChange[]>([])
 
   useEffect(() => {
@@ -43,6 +44,7 @@ function VendingMachine(): JSX.Element {
     })
     setCoinChange(data.filter((change) => change.coin !== 0))
     setDepositedAmount(0)
+    setProductListRenderKey(productListRenderKey + 1)
   })
 
   const isBuyEnabled = () => {
@@ -55,7 +57,7 @@ function VendingMachine(): JSX.Element {
 
   return (
     <div>
-      <ProductList onSelect={(product) => setSelectedProduct(product)} />
+      <ProductList onSelect={(product) => setSelectedProduct(product)} key={productListRenderKey} />
       <div className="mb-4">
         {[5, 10, 20, 50, 100].map((n) => (
           <div key={n} className="inline mr-2 mb-4">
