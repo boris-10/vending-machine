@@ -22,7 +22,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
     }
   })
 
-  const { isLoading, isError, data, error, remove } = useQuery(
+  const { isLoading, isError, data, remove } = useQuery(
     'fetchProductById',
     () => axios(`/products/${props.productId}`),
     { enabled: !!props.productId }

@@ -22,7 +22,7 @@ function UserForm(props: UserFormProps): JSX.Element {
     }
   })
 
-  const { isLoading, isError, data, error, remove } = useQuery('fetchUserById', () => axios(`/users/${props.userId}`), {
+  const { isLoading, isError, data, remove } = useQuery('fetchUserById', () => axios(`/users/${props.userId}`), {
     enabled: !!props.userId,
   })
 
@@ -102,9 +102,13 @@ function UserForm(props: UserFormProps): JSX.Element {
               <div className="flex flex-col flex-1 ml-6">
                 <Field
                   id="role"
+                  as="select"
                   name="role"
                   className="px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                />
+                >
+                  <option value="seller">Seller</option>
+                  <option value="buyer">Buyer</option>
+                </Field>
               </div>
             </div>
 
