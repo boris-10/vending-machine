@@ -8,7 +8,7 @@ This is a monorepo containing both frontend and backend code. Both packages are 
 
 ### Frontend
 
-Using [React](https://reactjs.org/) and created with `create-react-app`. Tailwind added as a CSS library. 
+Using [React](https://reactjs.org/) and created with `create-react-app`. Tailwind added as a CSS library.
 
 ### Backend
 
@@ -25,6 +25,7 @@ npm install
 ```
 
 This will run postinstall script and install dependencies in both packages.
+It's important to set `.env` file at the `packages/backend` folder (there is `.env.example` for reference).
 
 ### Seeding
 
@@ -34,6 +35,8 @@ To seed the database run
 cd packages/backend
 npm run prisma:seed
 ```
+
+Seeding adds users `test1` and `test2` (sellers), `test3` and `test4` (buyers). ALl of them have `123456` as password.
 
 ### Start
 
@@ -55,3 +58,5 @@ cd packages/backend
 npm run test
 npm run test:e2e
 ```
+
+> 💡 It's important to seed database before running e2e tests (to make sure DB has sufficient product amounts and users).
