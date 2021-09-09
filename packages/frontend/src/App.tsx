@@ -46,6 +46,37 @@ axios.interceptors.response.use(undefined, (error) => {
   return Promise.reject(error)
 })
 
+const buyerRoutes = [
+  { path: '/vending-machine', component: <VendingMachinePage /> },
+  { path: '/', component: <Redirect to="/vending-machine" /> },
+  { path: '*', component: <Redirect to="/" /> },
+]
+
+const sellerRoutes = [
+  {
+    path: '/products/create',
+    component: (
+      <ProductsContextProvider>
+        <ProductPage />
+      </ProductsContextProvider>
+    ),
+  },
+  {
+    path: '/products/:productId/edit',
+    component: (
+      <ProductsContextProvider>
+        <ProductPage />
+      </ProductsContextProvider>
+    ),
+  },
+  { path: '/products', component: <ProductListPage /> },
+  { path: '/users/create', component: <UserPage /> },
+  { path: '/users/:userId/edit', component: <UserPage /> },
+  { path: '/users', component: <UserListPage /> },
+  { path: '/', component: <Redirect to="/products" /> },
+  { path: '*', component: <Redirect to="/" /> },
+]
+
 function App(): JSX.Element {
   const { currentUser } = useContext(AuthContext)
   const isLoggedIn = Boolean(localStorage.getItem('jwt'))
@@ -68,50 +99,19 @@ function App(): JSX.Element {
               <RegisterPage />
             </Route>
 
-            {currentUser?.role === UserRole.Buyer && [
-              <Route key={0} path="/vending-machine">
-                <VendingMachinePage />
-              </Route>,
-              <Route key={1} exact path="/">
-                <Redirect to="/vending-machine" />
-              </Route>,
+            {currentUser?.role === UserRole.Buyer &&
+              buyerRoutes.map(({ path, component }, i) => (
+                <Route key={i} path={path}>
+                  {component}
+                </Route>
+              ))}
 
-              <Route key={8} path="*">
-                <Redirect to="/" />
-              </Route>,
-            ]}
-
-            {currentUser?.role === UserRole.Seller && [
-              <Route key={0} path="/products/create">
-                <ProductsContextProvider>
-                  <ProductPage />
-                </ProductsContextProvider>
-              </Route>,
-              <Route key={1} path="/products/:productId/edit">
-                <ProductsContextProvider>
-                  <ProductPage />
-                </ProductsContextProvider>
-              </Route>,
-              <Route key={2} path="/products">
-                <ProductListPage />
-              </Route>,
-              <Route key={3} path="/users/create">
-                <UserPage />
-              </Route>,
-              <Route key={4} path="/users/:userId/edit">
-                <UserPage />
-              </Route>,
-              <Route key={5} path="/users">
-                <UserListPage />
-              </Route>,
-              <Route key={6} exact path="/">
-                <Redirect to="/products" />
-              </Route>,
-
-              <Route key={7} path="*">
-                <Redirect to="/" />
-              </Route>,
-            ]}
+            {currentUser?.role === UserRole.Seller &&
+              sellerRoutes.map(({ path, component }, i) => (
+                <Route key={i} path={path}>
+                  {component}
+                </Route>
+              ))}
           </Switch>
         </div>
       </Router>
