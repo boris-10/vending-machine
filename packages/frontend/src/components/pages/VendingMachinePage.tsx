@@ -4,12 +4,13 @@ import VendingMachine from '../core/VendingMachine'
 
 function BuyerPage(): JSX.Element {
   return (
-    <div>
-      <h2>VENDING MACHINE</h2>
-
-      <ProductsContextProvider>
-        <VendingMachine />
-      </ProductsContextProvider>
+    <div className="flex flex-col">
+      <h1 className="mb-6 text-center">Vending Machine</h1>
+      <div className="flex justify-center">
+        <ProductsContextProvider>
+          <VendingMachine />
+        </ProductsContextProvider>
+      </div>
     </div>
   )
 }

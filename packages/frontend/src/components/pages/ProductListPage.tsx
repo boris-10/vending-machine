@@ -17,11 +17,10 @@ function ProductListPage(): JSX.Element {
   }
 
   return (
-    <div>
-      <h2>Select product to edit:</h2>
+    <div className="flex flex-col m-auto w-1/2">
+      <h1 className="mb-4 text-center">Products</h1>
       <ProductList onSelect={onProductSelect} />
-      <br />
-      <Button text="Create new" onClick={onCreateNewProduct} />
+      <Button text="Create new" onClick={onCreateNewProduct} variation="success" />
     </div>
   )
 }

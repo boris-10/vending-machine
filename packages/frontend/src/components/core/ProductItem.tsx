@@ -9,8 +9,20 @@ interface ProductItemProps {
 
 function ProductItem(props: ProductItemProps): JSX.Element {
   return (
-    <div onClick={props.onClick} className={`ProductItem ${props.isSelected && 'ProductItem--selected'}`}>
-      <b>{props.product.productName}</b> ({props.product.amountAvailable}): <b>{props.product.cost}</b> ¢
+    <div
+      onClick={props.onClick}
+      className={`my-2 border p-2 border-gray-300 rounded-sm hover:bg-gray-200 cursor-pointer ${
+        props.isSelected && 'bg-blue-400'
+      }`}
+    >
+      <div className="flex justify-between">
+        <span>
+          <b>{props.product.productName}</b>&nbsp;({props.product.amountAvailable})
+        </span>
+        <span>
+          <b>{props.product.cost}</b> ¢
+        </span>
+      </div>
     </div>
   )
 }

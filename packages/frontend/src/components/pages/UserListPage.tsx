@@ -17,11 +17,10 @@ function UserListPage(): JSX.Element {
   }
 
   return (
-    <div>
-      <h2>Select user to edit:</h2>
+    <div className="flex flex-col m-auto w-1/2">
+      <h1 className="mb-4 text-center">Users</h1>
       <UserList onSelect={onUserSelect} />
-      <br />
-      <Button text="Create new" onClick={onCreateNewUser} />
+      <Button text="Create new" onClick={onCreateNewUser} variation="success" />
     </div>
   )
 }

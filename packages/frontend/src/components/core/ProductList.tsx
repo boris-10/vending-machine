@@ -12,10 +12,10 @@ interface ProductListProps {
 
 function ProductList(props: ProductListProps): JSX.Element {
   const { selectedProduct } = useContext(ProductsContext)
-  const { isLoading, isError, data, error } = useQuery('fetchProducts', () => axios('/products'))
+  const { data } = useQuery('fetchProducts', () => axios('/products'))
 
   return (
-    <div className="ProductList">
+    <div className="my-4">
       {data?.data.map((product: Product) => (
         <ProductItem
           key={product.id}

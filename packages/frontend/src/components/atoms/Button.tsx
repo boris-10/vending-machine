@@ -1,17 +1,34 @@
 import React from 'react'
 
-interface ButtonProps {
+interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   text: string
-  onClick: () => void
+  onClick?: () => void
+  variation?: 'primary' | 'success' | 'warning' | 'danger'
   isDisabled?: boolean
 }
 
 function Button(props: ButtonProps): JSX.Element {
+  const color = () => {
+    switch (props.variation) {
+      case 'success':
+        return 'bg-green-500 hover:bg-green-600'
+      case 'warning':
+        return 'bg-yellow-500 hover:bg-yellow-600'
+      case 'danger':
+        return 'bg-red-500 hover:bg-red-600'
+      case 'primary':
+      default:
+        return 'bg-indigo-600 hover:bg-indigo-700'
+    }
+  }
+
   return (
     <button
       onClick={props.onClick}
       disabled={props.isDisabled}
-      className="justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      className={`${color()} ${
+        props.className
+      } justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
     >
       {props.text}
     </button>

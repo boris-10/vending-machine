@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useMutation, useQuery } from 'react-query'
 
 import Product from '../../models/Product'
+import Button from '../atoms/Button'
 
 interface ProductFormProps {
   productId?: number
@@ -46,60 +47,74 @@ function ProductForm(props: ProductFormProps): JSX.Element {
 
   return (
     <div>
-      <h2>{props.productId ? `Edit product - ${productName}` : 'Create product'}</h2>
+      <h1 className="mb-8 text-center">{props.productId ? `Edit product - ${productName}` : 'Create product'}</h1>
 
-      <Formik
-        enableReinitialize
-        initialValues={{ id, sellerId, productName, cost, amountAvailable }}
-        validate={(model: Product) => {
-          const errors: { name?: string } = {}
-          if (!model.productName) {
-            errors.name = 'Required'
-          }
-          return errors
-        }}
-        onSubmit={(model: Product) => {
-          upsertProductMutation.mutate(model)
-          props.onSubmit()
-        }}
-      >
-        <Form>
-          <label htmlFor="productName">Name</label>
-          <Field
-            id="productName"
-            name="productName"
-            className="px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-          />
-          <ErrorMessage name="productName" component="span" />
+      <div className="flex justify-center">
+        <Formik
+          enableReinitialize
+          initialValues={{ id, sellerId, productName, cost, amountAvailable }}
+          validate={(model: Product) => {
+            const errors: { name?: string } = {}
+            if (!model.productName) {
+              errors.name = 'Required'
+            }
+            return errors
+          }}
+          onSubmit={(model: Product) => {
+            upsertProductMutation.mutate(model)
+            props.onSubmit()
+          }}
+        >
+          <Form className="w-96">
+            <div className="flex justify-between mb-4">
+              <label className="w-24 pt-1" htmlFor="productName">
+                Name <span className="text-red-400">*</span>
+              </label>
+              <div className="flex flex-col flex-1 ml-6">
+                <Field
+                  id="productName"
+                  name="productName"
+                  className="px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                />
+                <ErrorMessage name="productName" component="span" />
+              </div>
+            </div>
 
-          <br />
-          <label htmlFor="cost">Cost</label>
-          <Field
-            id="cost"
-            name="cost"
-            type="number"
-            className="px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-          />
-          <ErrorMessage name="cost" component="span" />
+            <div className="flex justify-between mb-4">
+              <label className="w-24 pt-1" htmlFor="cost">
+                Cost (¢)
+              </label>
+              <div className="flex flex-col flex-1 ml-6">
+                <Field
+                  id="cost"
+                  name="cost"
+                  type="number"
+                  min="0"
+                  className="px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                />
+                <ErrorMessage name="cost" component="span" />
+              </div>
+            </div>
 
-          <br />
-          <label htmlFor="amountAvailable">Amount available</label>
-          <Field
-            id="amountAvailable"
-            name="amountAvailable"
-            type="number"
-            className="px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-          />
+            <div className="flex justify-between mb-4">
+              <label className="w-24 pt-1" htmlFor="amountAvailable">
+                Amount
+              </label>
+              <div className="flex flex-col flex-1 ml-6">
+                <Field
+                  id="amountAvailable"
+                  name="amountAvailable"
+                  type="number"
+                  min="0"
+                  className="px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                />
+              </div>
+            </div>
 
-          <br />
-          <button
-            type="submit"
-            className="justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Submit
-          </button>
-        </Form>
-      </Formik>
+            <Button type="submit" text="Submit" className="w-full mt-4" variation="success" />
+          </Form>
+        </Formik>
+      </div>
     </div>
   )
 }

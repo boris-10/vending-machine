@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { QueryClient, QueryClientProvider } from 'react-query'
 import axios from 'axios'
 
-import './App.css'
 import { AuthContext } from './providers/AuthProvider'
 import LoginPage from './components/pages/LoginPage'
 import ProductsContextProvider from './providers/ProductsProvider'
@@ -40,8 +39,6 @@ function App(): JSX.Element {
       <Router>
         <div className="App">
           {!!currentUser && <Header />}
-          <br />
-
           {!isLoggedIn && <Redirect to="/login" />}
 
           <Switch>
