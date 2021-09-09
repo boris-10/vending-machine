@@ -5,6 +5,7 @@ import axios from 'axios'
 
 import { AuthContext } from './providers/AuthProvider'
 import LoginPage from './components/pages/LoginPage'
+import RegisterPage from './components/pages/RegisterPage'
 import ProductsContextProvider from './providers/ProductsProvider'
 import ProductListPage from './components/pages/ProductListPage'
 import ProductPage from './components/pages/ProductPage'
@@ -47,8 +48,8 @@ function App(): JSX.Element {
               {isLoggedIn && <Redirect to="/" />}
               <LoginPage />
             </Route>
-            <Route path="/users/create">
-              <UserPage />
+            <Route path="/register">
+              <RegisterPage />
             </Route>
 
             {currentUser?.role === UserRole.Buyer && [
@@ -57,6 +58,10 @@ function App(): JSX.Element {
               </Route>,
               <Route key={1} exact path="/">
                 <Redirect to="/vending-machine" />
+              </Route>,
+
+              <Route key={8} path="*">
+                <Redirect to="/" />
               </Route>,
             ]}
 
@@ -74,20 +79,23 @@ function App(): JSX.Element {
               <Route key={2} path="/products">
                 <ProductListPage />
               </Route>,
-              <Route key={3} path="/users/:userId/edit">
+              <Route key={3} path="/users/create">
                 <UserPage />
               </Route>,
-              <Route key={4} path="/users">
+              <Route key={4} path="/users/:userId/edit">
+                <UserPage />
+              </Route>,
+              <Route key={5} path="/users">
                 <UserListPage />
               </Route>,
-              <Route key={5} exact path="/">
+              <Route key={6} exact path="/">
                 <Redirect to="/products" />
               </Route>,
-            ]}
 
-            <Route path="*">
-              <Redirect to="/" />
-            </Route>
+              <Route key={7} path="*">
+                <Redirect to="/" />
+              </Route>,
+            ]}
           </Switch>
         </div>
       </Router>

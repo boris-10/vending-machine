@@ -1,34 +1,33 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useMutation } from 'react-query'
 import { useHistory } from 'react-router-dom'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
+import axios from 'axios'
 
-import { AuthContext } from '../../providers/AuthProvider'
-
-interface LoginModel {
+interface RegisterModel {
   username: string
   password: string
+  role: string
 }
 
-interface LoginFormProps {
-  onLoginSuccess: () => void
+interface RegisterFormProps {
+  onRegisterSuccess: () => void
 }
 
-function LoginForm(props: LoginFormProps): JSX.Element {
-  const { login } = useContext(AuthContext)
+function RegisterForm(props: RegisterFormProps): JSX.Element {
   const history = useHistory()
 
-  const loginMutation = useMutation(async (loginModel: LoginModel) => {
+  const registerMutation = useMutation(async (registerModel: RegisterModel) => {
     try {
-      await login(loginModel.username, loginModel.password)
-      props.onLoginSuccess()
+      await axios.post('/users', registerModel)
+      props.onRegisterSuccess()
     } catch (error) {
       throw error
     }
   })
 
-  const onRegisterRedirect = () => {
-    history.push('/register')
+  const onLoginRedirect = () => {
+    history.push('/login')
   }
 
   return (
@@ -40,14 +39,11 @@ function LoginForm(props: LoginFormProps): JSX.Element {
             src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
             alt="Workflow"
           />
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Create new account</h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Or&nbsp;
-            <a
-              onClick={onRegisterRedirect}
-              className="font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer"
-            >
-              register
+            <a onClick={onLoginRedirect} className="font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer">
+              login
             </a>
           </p>
         </div>
@@ -56,7 +52,7 @@ function LoginForm(props: LoginFormProps): JSX.Element {
           <div className="rounded-md shadow-sm -space-y-px">
             <Formik
               enableReinitialize
-              initialValues={{ username: '', password: '' }}
+              initialValues={{ username: '', password: '', role: 'buyer' }}
               validate={(model) => {
                 const errors: { username?: string; password?: string } = {}
                 if (!model.username) {
@@ -68,7 +64,7 @@ function LoginForm(props: LoginFormProps): JSX.Element {
                 return errors
               }}
               onSubmit={(model) => {
-                loginMutation.mutate(model)
+                registerMutation.mutate(model)
               }}
             >
               <Form>
@@ -88,19 +84,32 @@ function LoginForm(props: LoginFormProps): JSX.Element {
                     id="password"
                     name="password"
                     type="password"
-                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                   />
                   <ErrorMessage name="password" render={(msg) => <div className="text-red-600 text-sm">{msg}</div>} />
+                </div>
+
+                <div className="mb-4">
+                  <label htmlFor="role">Role</label>
+                  <Field
+                    id="role"
+                    as="select"
+                    name="role"
+                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  >
+                    <option value="seller">Seller</option>
+                    <option value="buyer">Buyer</option>
+                  </Field>
                 </div>
 
                 <div className="py-4">
                   <button
                     type="submit"
-                    className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >
                     <span className="absolute left-0 inset-y-0 flex items-center pl-3">
                       <svg
-                        className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
+                        className="h-5 w-5 text-green-400 group-hover:text-green-400"
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 20 20"
                         fill="currentColor"
@@ -113,7 +122,7 @@ function LoginForm(props: LoginFormProps): JSX.Element {
                         />
                       </svg>
                     </span>
-                    Sign in
+                    Register
                   </button>
                 </div>
               </Form>
@@ -125,4 +134,4 @@ function LoginForm(props: LoginFormProps): JSX.Element {
   )
 }
 
-export default LoginForm
+export default RegisterForm
