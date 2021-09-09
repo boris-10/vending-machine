@@ -9,6 +9,10 @@ interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
 
 function Button(props: ButtonProps): JSX.Element {
   const color = () => {
+    if (props.isDisabled) {
+      return 'bg-gray-400 cursor-not-allowed'
+    }
+
     switch (props.variation) {
       case 'success':
         return 'bg-green-500 hover:bg-green-600'

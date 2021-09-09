@@ -11,8 +11,8 @@ function ProductItem(props: ProductItemProps): JSX.Element {
   return (
     <div
       onClick={props.onClick}
-      className={`my-2 border p-2 border-gray-300 rounded-sm hover:bg-gray-200 cursor-pointer ${
-        props.isSelected && 'bg-blue-400'
+      className={`my-2 border p-2 border-gray-300 rounded-sm cursor-pointer ${
+        props.isSelected ? 'bg-blue-400' : 'hover:bg-gray-200'
       }`}
     >
       <div className="flex justify-between">
