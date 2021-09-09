@@ -21,21 +21,22 @@ const AuthContextProvider: FC = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<Partial<User> | null>(null)
 
   useEffect(() => {
-    const existingToken = localStorage.getItem('jwt')?.toString()
-    const decodedToken = existingToken && JSON.parse(atob(existingToken.split('.')[1]))
-    decodedToken && setCurrentUser({ username: decodedToken.username })
+    ;(async () => {
+      const { data: user } = await axios('/auth/me')
+      setCurrentUser(user)
+    })()
   }, [])
 
   const login = async (username: string, password: string) => {
-    const tokenResponse = await axios.post('/auth/login', { username, password })
-    localStorage.setItem('jwt', tokenResponse.data.accessToken)
+    const { data: tokenResponse } = await axios.post('/auth/login', { username, password })
+    localStorage.setItem('jwt', tokenResponse.accessToken)
 
-    setCurrentUser({ username })
+    const { data: user } = await axios('/auth/me')
+    setCurrentUser(user)
   }
 
   const logout = () => {
     localStorage.removeItem('jwt')
-
     setCurrentUser(null)
   }
 
