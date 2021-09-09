@@ -22,19 +22,12 @@ function UserForm(props: UserFormProps): JSX.Element {
     }
   })
 
-  const { isLoading, isError, data, remove } = useQuery('fetchUserById', () => axios(`/users/${props.userId}`), {
+  const { data, remove } = useQuery('fetchUserById', () => axios(`/users/${props.userId}`), {
     enabled: !!props.userId,
   })
 
   if (!props.userId) {
     remove()
-  }
-
-  if (isLoading) {
-    return <span>Loading...</span>
-  }
-  if (isError) {
-    return <span>Error</span>
   }
 
   const id = data?.data.id ?? null

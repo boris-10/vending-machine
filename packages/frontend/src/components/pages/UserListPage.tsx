@@ -9,15 +9,15 @@ function UserListPage(): JSX.Element {
   const history = useHistory()
 
   const onUserSelect = (user: User) => {
-    history.push(`/user/${user.id}/edit`)
+    history.push(`/users/${user.id}/edit`)
   }
 
   const onCreateNewUser = () => {
-    history.push('/user/create')
+    history.push('/users/create')
   }
 
   return (
-    <div className="flex flex-col m-auto w-1/2">
+    <div className="flex flex-col m-auto w-96">
       <h1 className="mb-4 text-center">Users</h1>
       <UserList onSelect={onUserSelect} />
       <Button text="Create new" onClick={onCreateNewUser} variation="success" />

@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { useMutation } from 'react-query'
+import { useHistory } from 'react-router-dom'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 
 import { AuthContext } from '../../providers/AuthProvider'
@@ -15,6 +16,7 @@ interface LoginFormProps {
 
 function LoginForm(props: LoginFormProps): JSX.Element {
   const { login } = useContext(AuthContext)
+  const history = useHistory()
 
   const loginMutation = useMutation(async (loginModel: LoginModel) => {
     try {
@@ -24,6 +26,10 @@ function LoginForm(props: LoginFormProps): JSX.Element {
       throw error
     }
   })
+
+  const onCreateNewUser = () => {
+    history.push('/users/create')
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -35,6 +41,12 @@ function LoginForm(props: LoginFormProps): JSX.Element {
             alt="Workflow"
           />
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
+          <p className="mt-2 text-center text-sm text-gray-600">
+            Or&nbsp;
+            <a onClick={onCreateNewUser} className="font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer">
+              create new user
+            </a>
+          </p>
         </div>
         <div className="mt-8 space-y-6">
           <input type="hidden" name="remember" value="true" />

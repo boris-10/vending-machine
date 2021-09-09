@@ -1,14 +1,14 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useHistory, Link } from 'react-router-dom'
+import { UserRole } from '../../models/User'
 
 import { AuthContext } from '../../providers/AuthProvider'
 import Button from '../atoms/Button'
 
-const navigation = [
-  { name: 'Vending machine', href: '/vending-machine', current: false },
-  { name: 'Products', href: '/products', current: false },
-  { name: 'Users', href: '/users', current: false },
-]
+interface NavLink {
+  name: string
+  path: string
+}
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -16,7 +16,31 @@ function classNames(...classes: string[]) {
 
 function Header(): JSX.Element {
   const { logout, currentUser } = useContext(AuthContext)
+  const [navLinks, setNavLinks] = useState<NavLink[]>([])
+  const [currentRoute, setCurrentRoute] = useState('')
   const history = useHistory()
+
+  history.listen(({ pathname }) => {
+    setCurrentRoute(pathname)
+  })
+
+  useEffect(() => {
+    setCurrentRoute(history.location.pathname)
+  }, [])
+
+  useEffect(() => {
+    switch (currentUser?.role) {
+      case UserRole.Buyer:
+        setNavLinks([{ name: 'Vending machine', path: '/vending-machine' }])
+        break
+      case UserRole.Seller:
+        setNavLinks([
+          { name: 'Products', path: '/products' },
+          { name: 'Users', path: '/users' },
+        ])
+        break
+    }
+  }, [currentUser])
 
   const onLogout = () => {
     logout()
@@ -37,17 +61,18 @@ function Header(): JSX.Element {
             </div>
             <div className="hidden sm:block sm:ml-6">
               <div className="flex space-x-4">
-                {navigation.map((item) => (
+                {navLinks.map((navLink) => (
                   <Link
-                    key={item.name}
-                    to={item.href}
+                    key={navLink.name}
+                    to={navLink.path}
                     className={classNames(
-                      item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                      currentRoute.includes(navLink.path)
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                       'px-3 py-2 rounded-md text-sm font-medium'
                     )}
-                    aria-current={item.current ? 'page' : undefined}
                   >
-                    {item.name}
+                    {navLink.name}
                   </Link>
                 ))}
               </div>

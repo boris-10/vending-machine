@@ -22,21 +22,12 @@ function ProductForm(props: ProductFormProps): JSX.Element {
     }
   })
 
-  const { isLoading, isError, data, remove } = useQuery(
-    'fetchProductById',
-    () => axios(`/products/${props.productId}`),
-    { enabled: !!props.productId }
-  )
+  const { data, remove } = useQuery('fetchProductById', () => axios(`/products/${props.productId}`), {
+    enabled: !!props.productId,
+  })
 
   if (!props.productId) {
     remove()
-  }
-
-  if (isLoading) {
-    return <span>Loading...</span>
-  }
-  if (isError) {
-    return <span>Error</span>
   }
 
   const id = data?.data.id ?? null

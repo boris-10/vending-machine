@@ -12,6 +12,7 @@ import UserListPage from './components/pages/UserListPage'
 import UserPage from './components/pages/UserPage'
 import VendingMachinePage from './components/pages/VendingMachinePage'
 import Header from './components/core/Header'
+import { UserRole } from './models/User'
 
 const queryClient = new QueryClient()
 
@@ -46,33 +47,46 @@ function App(): JSX.Element {
               {isLoggedIn && <Redirect to="/" />}
               <LoginPage />
             </Route>
-            <Route path="/products">
-              <ProductListPage />
-            </Route>
-            <Route path="/product/:productId/edit">
-              <ProductsContextProvider>
-                <ProductPage />
-              </ProductsContextProvider>
-            </Route>
-            <Route path="/product/create">
-              <ProductsContextProvider>
-                <ProductPage />
-              </ProductsContextProvider>
-            </Route>
-            <Route path="/users">
-              <UserListPage />
-            </Route>
-            <Route path="/user/:userId/edit">
+            <Route path="/users/create">
               <UserPage />
             </Route>
-            <Route path="/user/create">
-              <UserPage />
-            </Route>
-            <Route path="/vending-machine">
-              <VendingMachinePage />
-            </Route>
-            <Route exact path="/">
-              <Redirect to="/vending-machine" />
+
+            {currentUser?.role === UserRole.Buyer && [
+              <Route key={0} path="/vending-machine">
+                <VendingMachinePage />
+              </Route>,
+              <Route key={1} exact path="/">
+                <Redirect to="/vending-machine" />
+              </Route>,
+            ]}
+
+            {currentUser?.role === UserRole.Seller && [
+              <Route key={0} path="/products/create">
+                <ProductsContextProvider>
+                  <ProductPage />
+                </ProductsContextProvider>
+              </Route>,
+              <Route key={1} path="/products/:productId/edit">
+                <ProductsContextProvider>
+                  <ProductPage />
+                </ProductsContextProvider>
+              </Route>,
+              <Route key={2} path="/products">
+                <ProductListPage />
+              </Route>,
+              <Route key={3} path="/users/:userId/edit">
+                <UserPage />
+              </Route>,
+              <Route key={4} path="/users">
+                <UserListPage />
+              </Route>,
+              <Route key={5} exact path="/">
+                <Redirect to="/products" />
+              </Route>,
+            ]}
+
+            <Route path="*">
+              <Redirect to="/" />
             </Route>
           </Switch>
         </div>

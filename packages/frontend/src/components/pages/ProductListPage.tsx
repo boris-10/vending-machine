@@ -9,15 +9,15 @@ function ProductListPage(): JSX.Element {
   const history = useHistory()
 
   const onProductSelect = (product: Product) => {
-    history.push(`/product/${product.id}/edit`)
+    history.push(`/products/${product.id}/edit`)
   }
 
   const onCreateNewProduct = () => {
-    history.push('/product/create')
+    history.push('/products/create')
   }
 
   return (
-    <div className="flex flex-col m-auto w-1/2">
+    <div className="flex flex-col m-auto w-96">
       <h1 className="mb-4 text-center">Products</h1>
       <ProductList onSelect={onProductSelect} />
       <Button text="Create new" onClick={onCreateNewProduct} variation="success" />
