@@ -2,6 +2,8 @@ import React, { useContext } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import axios from 'axios'
+import ReactNotification, { store } from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
 
 import { AuthContext } from './providers/AuthProvider'
 import LoginPage from './components/pages/LoginPage'
@@ -17,20 +19,32 @@ import { UserRole } from './models/User'
 
 const queryClient = new QueryClient()
 
-axios.interceptors.request.use(
-  (request) => {
-    request.baseURL = 'http://localhost:8080'
+axios.interceptors.request.use((request) => {
+  request.baseURL = 'http://localhost:8080'
 
-    const token = localStorage.getItem('jwt')?.toString()
-    if (token) {
-      request.headers['Authorization'] = `Bearer ${token}`
-    }
-    return request
-  },
-  (error) => {
-    return Promise.reject(error)
+  const token = localStorage.getItem('jwt')?.toString()
+  if (token) {
+    request.headers['Authorization'] = `Bearer ${token}`
   }
-)
+  return request
+})
+
+axios.interceptors.response.use(undefined, (error) => {
+  const message = Array.isArray(error.response?.data?.message)
+    ? error.response?.data?.message.join('\n')
+    : error.response?.data?.message
+
+  store.addNotification({
+    title: 'Error',
+    message,
+    type: 'danger',
+    insert: 'top',
+    container: 'top-right',
+    dismiss: { duration: 5000, onScreen: true },
+  })
+
+  return Promise.reject(error)
+})
 
 function App(): JSX.Element {
   const { currentUser } = useContext(AuthContext)
@@ -38,6 +52,8 @@ function App(): JSX.Element {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ReactNotification />
+
       <Router>
         <div className="App">
           {!!currentUser && <Header />}
