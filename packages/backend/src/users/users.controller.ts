@@ -1,13 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors } from '@nestjs/common'
 import { Throttle, ThrottlerGuard } from '@nestjs/throttler'
 import { UsersService } from './users.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
+import { UserTransformInterceptor } from './user-transform.interceptor'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { RoleGuard } from '../auth/role.guard'
 import { Roles } from '../auth/roles.decorator'
 
 @Controller('users')
+@UseInterceptors(UserTransformInterceptor)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
