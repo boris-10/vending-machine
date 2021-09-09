@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common'
-import { COIN_DENOMINATIONS } from 'src/app.constants'
+import { Inject, Injectable } from '@nestjs/common'
+import { COIN_DENOMINATIONS_KEY } from './price.constants'
 
 @Injectable()
 export class PriceService {
+  constructor(@Inject(COIN_DENOMINATIONS_KEY) private readonly coinDenominators: number[]) {}
+
   splitToCoins(amount: number): { coin: number; count: number }[] {
-    const denominations = [...COIN_DENOMINATIONS]
+    const denominations = [...this.coinDenominators]
     const result = []
 
     while (amount > 0) {
