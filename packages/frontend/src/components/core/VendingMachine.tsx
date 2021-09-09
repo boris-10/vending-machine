@@ -66,7 +66,7 @@ function VendingMachine(): JSX.Element {
           text="Reset deposit"
           isDisabled={depositedAmount === 0}
           onClick={() => resetMutation.mutate()}
-          variation="danger"
+          variation="warning"
         />
       </div>
       <div className="flex justify-between mb-4">

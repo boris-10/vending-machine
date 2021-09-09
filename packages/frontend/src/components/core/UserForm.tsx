@@ -118,7 +118,7 @@ function UserForm(props: UserFormProps): JSX.Element {
                 }}
                 text="Delete user"
                 className="w-full mt-4"
-                variation="warning"
+                variation="danger"
               />
             )}
           </Form>

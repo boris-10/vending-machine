@@ -57,8 +57,8 @@ function ProductForm(props: ProductFormProps): JSX.Element {
             }
             return errors
           }}
-          onSubmit={(model: Product) => {
-            upsertProductMutation.mutate(model)
+          onSubmit={async (model: Product) => {
+            await upsertProductMutation.mutateAsync(model)
             props.onSubmit()
           }}
         >
@@ -118,7 +118,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
                 }}
                 text="Delete product"
                 className="w-full mt-4"
-                variation="warning"
+                variation="danger"
               />
             )}
           </Form>
