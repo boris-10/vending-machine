@@ -1,9 +1,10 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import axios from 'axios'
 import { useMutation } from 'react-query'
 
-import ProductList from './ProductList'
 import { ProductsContext } from '../../providers/ProductsProvider'
+import { AuthContext } from '../../providers/AuthProvider'
+import ProductList from './ProductList'
 import Button from '../atoms/Button'
 
 interface CoinChange {
@@ -12,10 +13,15 @@ interface CoinChange {
 }
 
 function VendingMachine(): JSX.Element {
+  const { selectedProduct, setSelectedProduct } = useContext(ProductsContext)
+  const { currentUser } = useContext(AuthContext)
   const [depositedAmount, setDepositedAmount] = useState(0)
   const [selectedProductAmount, setSelectedProductAmount] = useState(1)
   const [coinChange, setCoinChange] = useState<CoinChange[]>([])
-  const { selectedProduct, setSelectedProduct } = useContext(ProductsContext)
+
+  useEffect(() => {
+    currentUser?.deposit && setDepositedAmount(currentUser?.deposit)
+  }, [currentUser])
 
   const depositMutation = useMutation(async (amount: number) => {
     const { data } = await axios.post('/machine/deposit', { amount })
@@ -77,7 +83,7 @@ function VendingMachine(): JSX.Element {
           min="1"
           value={selectedProductAmount}
           onChange={(e) => setSelectedProductAmount(Number(e.target.value))}
-          className="border border-gray-500 w-16 text-center pl-3"
+          className="border border-gray-500 w-16 text-center pl-3 rounded-sm"
         />
       </div>
       <h2 className="mb-4">
