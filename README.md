@@ -2,6 +2,10 @@
 
 Project demonstrates working of a simple vending machine.
 
+![App screenshot](./docs/app_screenshot_1.png)
+
+![App screenshot](./docs/app_screenshot_2.png)
+
 ## Structure
 
 This is a monorepo containing both frontend and backend code. Both packages are located in the `/packages` folder
