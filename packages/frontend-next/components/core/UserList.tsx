@@ -10,7 +10,7 @@ const UserList = (): JSX.Element => {
   return (
     <div>
       {data?.data.map((user: User) => (
-        <Link key={user.id} href={`/users/${user.id}/edit`}>
+        <Link key={user.id} href={`/users/${user.id}`}>
           <div>
             <b>{user.username}</b>
             <span className="uppercase">{user.role}</span>
