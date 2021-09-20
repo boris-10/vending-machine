@@ -16,5 +16,6 @@ module.exports = {
   rules: {
     'no-console': 'warn',
     'react/react-in-jsx-scope': 'off',
+    'react/display-name': 'off',
   },
 }

@@ -1,13 +1,14 @@
-import { HTMLProps } from 'react'
+import { HTMLProps, forwardRef } from 'react'
 
 interface ButtonProps extends HTMLProps<HTMLButtonElement> {
   text: string
   onClick?: () => void
   variation?: 'primary' | 'success' | 'warning' | 'danger'
   isDisabled?: boolean
+  type?: 'button' | 'submit' | 'reset'
 }
 
-function Button(props: ButtonProps): JSX.Element {
+const Button = forwardRef((props: ButtonProps, ref) => {
   const color = () => {
     if (props.isDisabled) {
       return 'bg-gray-400 cursor-not-allowed'
@@ -29,6 +30,7 @@ function Button(props: ButtonProps): JSX.Element {
   return (
     <button
       onClick={props.onClick}
+      type={props.type || 'button'}
       disabled={props.isDisabled}
       className={`${color()} ${
         props.className
@@ -37,6 +39,6 @@ function Button(props: ButtonProps): JSX.Element {
       {props.text}
     </button>
   )
-}
+})
 
 export default Button
