@@ -11,7 +11,9 @@ const WithAuthentication: withAuthenticationFn = (Component) => {
     const router = useRouter()
 
     useEffect(() => {
-      if (!currentUser) router.push('/auth')
+      const token = localStorage.getItem('jwt')?.toString()
+
+      if (!token) router.push('/auth')
     })
 
     return currentUser ? <Component /> : null
