@@ -8,7 +8,7 @@ const UserList = (): JSX.Element => {
   const { data } = useQuery('fetchUsers', () => axios('/users'))
 
   return (
-    <div>
+    <>
       {data?.data.map((user: User) => (
         <Link key={user.id} href={`/users/${user.id}`}>
           <div>
@@ -17,7 +17,7 @@ const UserList = (): JSX.Element => {
           </div>
         </Link>
       ))}
-    </div>
+    </>
   )
 }
 
