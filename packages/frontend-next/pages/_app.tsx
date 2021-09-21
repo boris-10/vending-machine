@@ -1,6 +1,9 @@
 import type { AppProps } from 'next/app'
+
 import axios from 'axios'
 import { QueryClient, QueryClientProvider } from 'react-query'
+
+import Layout from '../components/core/Layout'
 
 import 'tailwindcss/tailwind.css'
 
@@ -19,7 +22,9 @@ axios.interceptors.request.use((request) => {
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </QueryClientProvider>
   )
 }
