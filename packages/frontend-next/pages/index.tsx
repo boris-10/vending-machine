@@ -1,3 +1,5 @@
+import WithAuthentication from '../components/core/WithAuthentication'
+
 import type { NextPage } from 'next'
 
 const Home: NextPage = () => {
@@ -8,4 +10,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default WithAuthentication(Home)

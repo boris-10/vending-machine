@@ -1,5 +1,7 @@
 import { useRouter } from 'next/router'
+
 import UserForm from '../../components/core/UserForm'
+import WithAuthentication from '../../components/core/WithAuthentication'
 
 import type { NextPage } from 'next'
 
@@ -13,4 +15,4 @@ const UserDetailPage: NextPage = () => {
   return <UserForm onSubmit={redirectToUsers} />
 }
 
-export default UserDetailPage
+export default WithAuthentication(UserDetailPage)
