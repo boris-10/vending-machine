@@ -68,7 +68,7 @@ const Navbar = (): JSX.Element => {
             <span className="bg-gray-800 p-4 text-gray-400 cursor-default focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
               {currentUser?.username}
             </span>
-            {currentUser?.username && <Button onClick={onLogout} text="Logout" />}
+            {currentUser && <Button onClick={onLogout} text="Logout" />}
           </div>
         </div>
       </div>

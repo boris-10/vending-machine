@@ -5,8 +5,6 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 import Button from '../atoms/Button'
 
 import Product from '../../models/Product'
-import { useContext } from 'react'
-import { AuthContext } from '../../providers/AuthProvider'
 
 interface ProductFormProps {
   productId?: number
@@ -15,8 +13,6 @@ interface ProductFormProps {
 }
 
 const ProductForm = (props: ProductFormProps): JSX.Element => {
-  const { currentUser } = useContext(AuthContext)
-
   const { data, remove } = useQuery('fetchProductById', () => axios(`/products/${props.productId}`), {
     enabled: !!props.productId,
   })
@@ -39,33 +35,27 @@ const ProductForm = (props: ProductFormProps): JSX.Element => {
 
   const initialValues = {
     id: null,
-    sellerId: 0,
-    productName: '',
+    name: '',
     cost: 0,
     amountAvailable: 0,
   }
 
   const updatedValues = {
     id: data?.data.id ?? null,
-    sellerId: currentUser?.id ?? 0,
-    productName: data?.data.productName ?? '',
+    name: data?.data.name ?? '',
     cost: data?.data.cost ?? 0,
     amountAvailable: data?.data.amountAvailable ?? 0,
   }
 
   return (
     <div>
-      <h1 className="mb-8 text-center">
-        {props.productId ? `Edit product - ${data?.data.productName}` : 'Create product'}
-      </h1>
-
-      <div className="flex justify-center">
+      <div className="flex justify-center mt-8">
         <Formik
           enableReinitialize
           initialValues={props.productId ? updatedValues : initialValues}
           validate={(model: Product) => {
             const errors: { name?: string } = {}
-            if (!model.productName) {
+            if (!model.name) {
               errors.name = 'Required'
             }
             return errors
@@ -77,16 +67,16 @@ const ProductForm = (props: ProductFormProps): JSX.Element => {
         >
           <Form className="w-96">
             <div className="flex justify-between mb-4">
-              <label className="w-24 pt-1" htmlFor="productName">
+              <label className="w-24 pt-1" htmlFor="name">
                 Name <span className="text-red-400">*</span>
               </label>
               <div className="flex flex-col flex-1 ml-6">
                 <Field
-                  id="productName"
-                  name="productName"
+                  id="name"
+                  name="name"
                   className="px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 />
-                <ErrorMessage name="productName" component="span" />
+                <ErrorMessage name="name" component="span" className="text-red-600 text-sm" />
               </div>
             </div>
 
@@ -123,16 +113,17 @@ const ProductForm = (props: ProductFormProps): JSX.Element => {
 
             <Button type="submit" text="Submit" className="w-full mt-4" variation="success" />
 
-            <Button
-              onClick={() => {
-                props.productId && deleteProductMutation.mutate(props.productId)
-                props.onDelete?.()
-              }}
-              isDisabled={!props.productId}
-              text="Delete product"
-              className="w-full mt-4"
-              variation="danger"
-            />
+            {props.productId ? (
+              <Button
+                onClick={() => {
+                  props.productId && deleteProductMutation.mutate(props.productId)
+                  props.onDelete?.()
+                }}
+                text="Delete product"
+                className="w-full mt-4"
+                variation="danger"
+              />
+            ) : null}
           </Form>
         </Formik>
       </div>

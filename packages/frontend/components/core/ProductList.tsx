@@ -22,7 +22,7 @@ const ProductList = (): JSX.Element => {
       if (currentUser?.role === UserRole.Buyer) {
         return data
       }
-      return data?.filter((product: Product) => product.sellerId === currentUser?.id)
+      return data?.filter((product: Product) => product.seller.id === currentUser?.id)
     },
     { enabled: !!currentUser }
   )

@@ -24,7 +24,7 @@ export class ProductsService {
   }
 
   findAll() {
-    return this.productRepository.find()
+    return this.productRepository.find({ relations: ['seller'] })
   }
 
   findOne(id: number) {

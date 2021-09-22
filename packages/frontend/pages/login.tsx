@@ -8,7 +8,7 @@ const AuthPage: NextPage = () => {
   const router = useRouter()
 
   const onLoginSuccess = () => {
-    router.push('/')
+    router.push('/products')
   }
 
   return <LoginForm onLoginSuccess={onLoginSuccess} />

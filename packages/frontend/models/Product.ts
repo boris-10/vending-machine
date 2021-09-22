@@ -1,7 +1,9 @@
+import User from './User'
+
 export default interface Product {
   id?: number
-  sellerId: number
+  name: string
   amountAvailable: number
   cost: number
-  productName: string
+  seller?: User
 }
