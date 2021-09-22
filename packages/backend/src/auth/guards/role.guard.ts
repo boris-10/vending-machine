@@ -1,8 +1,8 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common'
-import { Request } from 'express'
 import { Reflector } from '@nestjs/core'
-import { UserInfo } from './entity/user-info.entity'
-import { ROLES_METADATA_KEY } from './auth.constants'
+
+import { ROLES_METADATA_KEY } from '../auth.constants'
+import { User } from '../../users/entities/user.entity'
 
 @Injectable()
 export class RoleGuard implements CanActivate {
@@ -10,13 +10,14 @@ export class RoleGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const roles = this.reflector.get<string[]>(ROLES_METADATA_KEY, context.getHandler())
+
     if (!roles) {
       return true
     }
 
-    const request = context.switchToHttp().getRequest<Request>()
-    const userInfo: UserInfo = request.user
+    const request = context.switchToHttp().getRequest()
+    const user: User = request.user
 
-    return roles.includes(userInfo.role)
+    return roles.includes(user.role)
   }
 }

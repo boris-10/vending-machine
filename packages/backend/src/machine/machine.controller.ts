@@ -1,36 +1,36 @@
-import { Controller, Post, Body, UseGuards, UseInterceptors } from '@nestjs/common'
-import { MachineService } from './machine.service'
-import { BuyRequestDto } from './dto/buy-request.dto'
-import { DepositRequestDto } from './dto/deposit-request.dto'
-import { JwtAuthGuard } from '../auth/jwt-auth.guard'
-import { CurrentUser } from '../auth/current-user.decorator'
-import { Roles } from '../auth/roles.decorator'
-import { RoleGuard } from '../auth/role.guard'
-import { UserTransformInterceptor } from '../users/user-transform.interceptor'
+import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common'
 
+import { Roles } from '../auth/decorators/roles.decorator'
+import { SignedInUser } from '../auth/decorators/signed-in-user.decorator'
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
+import { RoleGuard } from '../auth/guards/role.guard'
+import { User } from '../users/entities/user.entity'
+import { UserRole } from '../users/user-role'
+import { DepositDto } from './dto/deposit.dto'
+import { PurchaseDto } from './dto/purchase.dto'
+import { MachineService } from './machine.service'
+
+@UseGuards(JwtAuthGuard, RoleGuard)
 @Controller('machine')
-@UseGuards(RoleGuard)
-@UseGuards(JwtAuthGuard)
 export class MachineController {
   constructor(private readonly machineService: MachineService) {}
 
   @Post('deposit')
-  @Roles('buyer')
-  @UseInterceptors(UserTransformInterceptor)
-  deposit(@Body() { amount }: DepositRequestDto, @CurrentUser('id') userId: number) {
-    return this.machineService.deposit(userId, amount)
+  @Roles(UserRole.Buyer)
+  deposit(@Body() depositDto: DepositDto, @SignedInUser() user: User) {
+    return this.machineService.deposit(user, depositDto)
   }
 
-  @Post('buy')
-  @Roles('buyer')
-  buy(@Body() { productId, amount }: BuyRequestDto, @CurrentUser('id') userId: number) {
-    return this.machineService.buy(userId, productId, amount)
+  @Post('reset-deposit')
+  @HttpCode(200)
+  @Roles(UserRole.Buyer)
+  resetDeposit(@SignedInUser() user: User) {
+    return this.machineService.resetDeposit(user)
   }
 
-  @Post('reset')
-  @Roles('buyer')
-  @UseInterceptors(UserTransformInterceptor)
-  reset(@CurrentUser('id') userId: number) {
-    return this.machineService.reset(userId)
+  @Post('purchase')
+  @Roles(UserRole.Buyer)
+  purchase(@Body() purchaseDto: PurchaseDto, @SignedInUser() user: User) {
+    return this.machineService.purchase(user, purchaseDto)
   }
 }

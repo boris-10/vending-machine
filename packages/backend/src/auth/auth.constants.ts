@@ -1,1 +1,1 @@
-export const ROLES_METADATA_KEY = '_ROLES'
+export const ROLES_METADATA_KEY = Symbol('ROLES_METADATA_KEY')

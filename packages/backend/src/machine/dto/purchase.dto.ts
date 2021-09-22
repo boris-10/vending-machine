@@ -1,6 +1,6 @@
 import { IsInt, IsPositive } from 'class-validator'
 
-export class BuyRequestDto {
+export class PurchaseDto {
   @IsInt()
   @IsPositive()
   productId: number

@@ -1,8 +1,8 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common'
 
-import { UserInfo } from './entity/user-info.entity'
+import { User } from '../../users/entities/user.entity'
 
-export const CurrentUser = createParamDecorator(function (key: keyof UserInfo, ctx: ExecutionContext): UserInfo {
+export const SignedInUser = createParamDecorator(function (key: keyof User, ctx: ExecutionContext): User {
   const request = ctx.switchToHttp().getRequest()
 
   return key ? request.user[key] : request.user

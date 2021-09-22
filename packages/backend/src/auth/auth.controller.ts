@@ -1,31 +1,40 @@
-import { Controller, Post, Body, UnauthorizedException, Get, UseGuards, UseInterceptors } from '@nestjs/common'
-import { AuthService } from './auth.service'
-import { CurrentUser } from './current-user.decorator'
-import { CredentialsDto } from './dto/credentials.dto'
-import { UserInfo } from './entity/user-info.entity'
-import { JwtAuthGuard } from './jwt-auth.guard'
-import { UserTransformInterceptor } from '../users/user-transform.interceptor'
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  HttpCode,
+  Patch,
+  Post,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common'
 
-@Controller('auth')
+import { AuthService } from './auth.service'
+import { JwtAuthGuard } from './guards/jwt-auth.guard'
+import { SignedInUser } from './decorators/signed-in-user.decorator'
+import { SignInDto } from './dto/sign-in.dto'
+import { SignUpDto } from './dto/sign-up.dto'
+import { ChangePasswordDto } from './dto/change-password.dto'
+
+@Controller('')
+@UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('login')
-  async login(@Body() { username, password }: CredentialsDto) {
-    const user = await this.authService.validateUser(username, password)
-    if (!user) {
-      throw new UnauthorizedException('The credentials are incorrect')
-    }
-
-    const accessToken = await this.authService.generateAccessToken(user.username)
-
-    return { accessToken }
+  @Post('sign-in')
+  @HttpCode(200)
+  signIn(@Body() signInDto: SignInDto) {
+    return this.authService.signIn(signInDto)
   }
 
-  @Get('me')
+  @Post('sign-up')
+  signUp(@Body() signUpDto: SignUpDto) {
+    return this.authService.signUp(signUpDto)
+  }
+
   @UseGuards(JwtAuthGuard)
-  @UseInterceptors(UserTransformInterceptor)
-  async me(@CurrentUser() userInfo: UserInfo) {
-    return userInfo
+  @Patch('change-password')
+  changePassword(@SignedInUser('id') id: number, @Body() { newPassword }: ChangePasswordDto) {
+    return this.authService.changePassword(id, newPassword)
   }
 }

@@ -1,30 +1,28 @@
 import { ValidationPipe } from '@nestjs/common'
+import { ConfigService, ConfigType } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
-import { NestExpressApplication } from '@nestjs/platform-express'
-import * as helmet from 'helmet'
 import { AppModule } from './app.module'
-import { PrismaExceptionFilter } from './prisma-exception.filter'
-
-const { PORT = 8080 } = process.env
+import { appConfig } from './config/app.config'
+import { APP_CONFIG } from './config/constants'
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, { cors: true })
-
-  app.use(helmet())
+  const app = await NestFactory.create(AppModule)
+  app.setGlobalPrefix('api/v1')
 
   app.useGlobalPipes(
     new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
       transform: true,
       transformOptions: {
         enableImplicitConversion: true,
       },
-      whitelist: true,
-      forbidNonWhitelisted: true,
     })
   )
 
-  app.useGlobalFilters(new PrismaExceptionFilter())
+  const configService = app.get<ConfigService>(ConfigService)
+  const { port } = configService.get<ConfigType<typeof appConfig>>(APP_CONFIG)
 
-  await app.listen(PORT)
+  await app.listen(port)
 }
 bootstrap()

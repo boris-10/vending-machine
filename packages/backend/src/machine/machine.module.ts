@@ -1,14 +1,21 @@
 import { Module } from '@nestjs/common'
-import { PrismaModule } from 'nestjs-prisma'
+
 import { MachineService } from './machine.service'
 import { MachineController } from './machine.controller'
 import { UsersModule } from '../users/users.module'
 import { ProductsModule } from '../products/products.module'
-import { PriceModule } from '../price/price.module'
+import { CHANGE_CALCULATOR, DENOMINATIONS } from './machine.constants'
+import { ChangeCalculator } from './change-calculator'
 
 @Module({
-  imports: [PrismaModule, UsersModule, ProductsModule, PriceModule],
+  imports: [UsersModule, ProductsModule],
   controllers: [MachineController],
-  providers: [MachineService],
+  providers: [
+    MachineService,
+    {
+      provide: CHANGE_CALCULATOR,
+      useValue: new ChangeCalculator([...DENOMINATIONS]),
+    },
+  ],
 })
 export class MachineModule {}

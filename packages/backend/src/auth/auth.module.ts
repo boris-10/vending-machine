@@ -1,29 +1,29 @@
-import { forwardRef, Module } from '@nestjs/common'
-import { JwtModule } from '@nestjs/jwt'
+import { Module } from '@nestjs/common'
 import { PassportModule } from '@nestjs/passport'
-import { ConfigModule, ConfigType } from '@nestjs/config'
+import { JwtModule } from '@nestjs/jwt'
+
+import { jwtConfig, JWTConfigType } from '../config/jwt.config'
 import { UsersModule } from '../users/users.module'
-import { JwtStrategy } from './jwt-auth.strategy'
-import { PasswordService } from './password.service'
 import { AuthService } from './auth.service'
 import { AuthController } from './auth.controller'
-
-import { AppConfig } from '../app.config'
+import { PasswordService } from './password.service'
+import { JwtStrategy } from './strategies/jwt.strategy'
 
 @Module({
   imports: [
-    forwardRef(() => UsersModule),
+    UsersModule,
     PassportModule,
     JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [AppConfig.KEY],
-      useFactory: async (config: ConfigType<typeof AppConfig>) => ({
-        secret: config.jwtSecret,
+      inject: [jwtConfig.KEY],
+      useFactory: async (jwt: JWTConfigType) => ({
+        secret: jwt.secret,
+        signOptions: {
+          expiresIn: jwt.exp,
+        },
       }),
     }),
   ],
   controllers: [AuthController],
   providers: [AuthService, PasswordService, JwtStrategy],
-  exports: [PasswordService],
 })
 export class AuthModule {}

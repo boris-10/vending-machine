@@ -1,59 +1,41 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
-import { PrismaService } from 'nestjs-prisma'
-import { PriceService } from '../price/price.service'
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+
 import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
+import { Product } from './entities/product.entity'
+import { User } from '../users/entities/user.entity'
 
 @Injectable()
 export class ProductsService {
-  constructor(private readonly prisma: PrismaService, private readonly priceService: PriceService) {}
+  constructor(
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>
+  ) {}
 
-  create(createProductDto: CreateProductDto) {
-    if (!this.priceService.validCoinPrice(createProductDto.cost)) {
-      throw new BadRequestException('Product price has to be valid sum of coins')
-    }
-
-    return this.prisma.product.create({
-      data: {
-        cost: createProductDto.cost,
-        sellerId: createProductDto.sellerId,
-        productName: createProductDto.productName,
-        amountAvailable: createProductDto.amountAvailable,
-      },
+  async create({ id }: User, createProductDto: CreateProductDto) {
+    const product = await this.productRepository.create({
+      ...createProductDto,
+      seller: { id },
     })
+
+    return this.productRepository.save(product)
   }
 
   findAll() {
-    return this.prisma.product.findMany()
+    return this.productRepository.find()
   }
 
   findOne(id: number) {
-    return this.prisma.product.findUnique({
-      where: {
-        id,
-      },
-    })
+    return this.productRepository.findOne(id, { relations: ['seller'] })
   }
 
   update(id: number, updateProductDto: UpdateProductDto) {
-    return this.prisma.product.update({
-      where: {
-        id,
-      },
-      data: {
-        cost: updateProductDto.cost,
-        sellerId: updateProductDto.sellerId,
-        productName: updateProductDto.productName,
-        amountAvailable: updateProductDto.amountAvailable,
-      },
-    })
+    return this.productRepository.update({ id }, updateProductDto)
   }
 
   remove(id: number) {
-    return this.prisma.product.delete({
-      where: {
-        id,
-      },
-    })
+    return this.productRepository.delete(id)
   }
 }

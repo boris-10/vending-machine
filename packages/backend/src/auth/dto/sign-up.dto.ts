@@ -1,14 +1,13 @@
 import { IsAlphanumeric, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator'
 
-import { UserRole } from '../user-role'
+import { UserRole } from '../../users/user-role'
 
-export class CreateUserDto {
+export class SignUpDto {
   @IsNotEmpty()
   @IsAlphanumeric()
   username: string
 
   @IsString()
-  @IsNotEmpty()
   @MinLength(8)
   password: string
 
