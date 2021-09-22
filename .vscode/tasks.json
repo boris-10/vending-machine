@@ -23,9 +23,29 @@
     },
     {
       "type": "npm",
-      "script": "dev:backend",
+      "script": "dev:backend:db",
       "problemMatcher": [],
-      "label": "npm: dev:backend",
+      "label": "npm: dev:backend:db",
+      "detail": "Start Postgres with Docker Compose",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": false,
+        "group": "dev"
+      }
+    },
+    {
+      "type": "npm",
+      "script": "dev:backend:server",
+      "problemMatcher": [],
+      "label": "npm: dev:backend:server",
       "detail": "Start Nest backend development server",
       "group": {
         "kind": "build",
@@ -44,7 +64,7 @@
     {
       "label": "!Start Dev",
       "problemMatcher": [],
-      "dependsOn": ["npm: dev:frontend", "npm: dev:backend"]
+      "dependsOn": ["npm: dev:frontend", "npm: dev:backend:db", "npm: dev:backend:server"]
     }
   ]
 }

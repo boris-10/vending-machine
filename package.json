@@ -7,7 +7,8 @@
     "postinstall": "run-s install:**",
     "install:backend": "cd packages/backend && npm ci",
     "install:frontend": "cd packages/frontend && npm ci",
-    "dev:backend": "cd packages/backend && npm run start:dev",
+    "dev:backend:db": "cd packages/backend && docker-compose up",
+    "dev:backend:server": "cd packages/backend && npm run start:dev",
     "dev:frontend": "cd packages/frontend && npm run start"
   },
   "keywords": [],
