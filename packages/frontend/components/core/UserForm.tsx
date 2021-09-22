@@ -13,7 +13,7 @@ interface UserFormProps {
 }
 
 const UserForm = (props: UserFormProps): JSX.Element => {
-  const { data, remove } = useQuery('fetchUser', () => axios(`/users/me`), {
+  const { data } = useQuery('fetchUser', () => axios(`/users/me`), {
     enabled: true,
   })
 
@@ -24,6 +24,12 @@ const UserForm = (props: UserFormProps): JSX.Element => {
   })
 
   const deleteUserMutation = useMutation(() => axios.delete(`/users`))
+
+  const onDelete = async () => {
+    await deleteUserMutation.mutateAsync()
+    props.onDelete?.()
+  }
+
   return (
     <div>
       <div className="flex justify-center">
@@ -72,25 +78,17 @@ const UserForm = (props: UserFormProps): JSX.Element => {
                   name="role"
                   className="px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 >
-                  <option value="seller">Seller</option>
-                  <option value="buyer">Buyer</option>
+                  <option value="Seller">Seller</option>
+                  <option value="Buyer">Buyer</option>
                 </Field>
               </div>
             </div>
 
             <Button type="submit" text="Submit" className="w-full mt-4" variation="success" />
 
-            <Button
-              onClick={() => {
-                deleteUserMutation.mutate()
-                props.onDelete?.()
-              }}
-              text="Delete user"
-              className="w-full mt-4"
-              variation="danger"
-            />
+            <Button onClick={onDelete} text="Delete user" className="w-full mt-4" variation="danger" />
             <div className="flex justify-center mt-8">
-              <Link href="users/change-password">
+              <Link href="change-password">
                 <p className="font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer">Change password</p>
               </Link>
             </div>
