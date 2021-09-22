@@ -13,7 +13,7 @@ const WithAuthentication: withAuthenticationFn = (Component) => {
     useEffect(() => {
       const token = localStorage.getItem('jwt')?.toString()
 
-      if (!token) router.push('/sing-in')
+      if (!token) router.push('/login')
     })
 
     return currentUser ? <Component /> : null

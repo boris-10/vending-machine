@@ -4,7 +4,7 @@ import LoginForm from '../components/core/LoginForm'
 
 import type { NextPage } from 'next'
 
-const AuthPage: NextPage = () => {
+const LoginPage = () => {
   const router = useRouter()
 
   const onLoginSuccess = () => {
@@ -14,4 +14,4 @@ const AuthPage: NextPage = () => {
   return <LoginForm onLoginSuccess={onLoginSuccess} />
 }
 
-export default AuthPage
+export default LoginPage

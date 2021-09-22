@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { UserRole } from '../../models/User'
 
 import { AuthContext } from '../../providers/AuthProvider'
 import Button from '../atoms/Button'
@@ -19,27 +18,14 @@ const Navbar = (): JSX.Element => {
   const router = useRouter()
 
   const { logout, currentUser } = useContext(AuthContext)
-  const [navLinks, setNavLinks] = useState<NavLink[]>([])
   const [currentRoute, setCurrentRoute] = useState('')
 
   useEffect(() => {
     setCurrentRoute(router.pathname)
   }, [])
 
-  useEffect(() => {
-    switch (currentUser?.role) {
-      case UserRole.Buyer:
-        setNavLinks([{ name: 'Vending machine', path: '/vending-machine' }])
-        break
-      case UserRole.Seller:
-        setNavLinks([{ name: 'Products', path: '/products' }])
-        break
-    }
-  }, [currentUser])
-
   const onLogout = () => {
     logout()
-    router.push('/login')
   }
 
   return (

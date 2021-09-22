@@ -49,6 +49,7 @@ const AuthContextProvider: FC = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('jwt')
     setCurrentUser(null)
+    router.push('/login')
   }
 
   return (
