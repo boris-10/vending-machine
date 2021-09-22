@@ -9,12 +9,14 @@ type AuthContextState = {
   currentUser: Partial<User> | null
   login: (username: string, password: string) => Promise<void>
   logout: () => void
+  setCurrentUser: (user: Partial<User>) => void
 }
 
 const contextDefaultValues: AuthContextState = {
   currentUser: null,
   login: () => Promise.resolve(),
   logout: () => undefined,
+  setCurrentUser: (user: Partial<User>) => undefined,
 }
 
 export const AuthContext = createContext<AuthContextState>(contextDefaultValues)
@@ -58,6 +60,7 @@ const AuthContextProvider: FC = ({ children }) => {
         currentUser,
         login,
         logout,
+        setCurrentUser,
       }}
     >
       {children}

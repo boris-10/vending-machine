@@ -1,72 +1,49 @@
 import axios from 'axios'
 import { useQuery, useMutation } from 'react-query'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
+import Link from 'next/link'
 
 import Button from '../../components/atoms/Button'
 
 import User, { UserRole } from '../../models/User'
 
 interface UserFormProps {
-  userId?: number
-  onSubmit: () => void
+  onSubmit: (user: Partial<User>) => void
   onDelete?: () => void
 }
 
 const UserForm = (props: UserFormProps): JSX.Element => {
-  const { data, remove } = useQuery('fetchUserById', () => axios(`/users/${props.userId}`), {
-    enabled: !!props.userId,
+  const { data, remove } = useQuery('fetchUser', () => axios(`/users/me`), {
+    enabled: true,
   })
 
-  if (!props.userId) {
-    remove()
-  }
-
-  const updateUserMutation = useMutation((user: User) => {
+  const updateUserMutation = useMutation((user: Partial<User>) => {
     const { id, ...payload } = user
 
-    if (id) {
-      return axios.patch(`/users/${id}`, payload)
-    } else {
-      return axios.post('/users', payload)
-    }
+    return axios.patch(`/users`, payload)
   })
 
-  const deleteUserMutation = useMutation((id: number) => axios.delete(`/users/${id}`))
-
-  const initialValues = {
-    id: null,
-    username: '',
-    password: '',
-    role: UserRole.Buyer,
-  }
-
-  const updatedValues = {
-    id: data?.data.id ?? null,
-    username: data?.data.username ?? '',
-    password: data?.data.password ?? '',
-    role: data?.data.role ?? UserRole.Buyer,
-  }
-
+  const deleteUserMutation = useMutation(() => axios.delete(`/users`))
   return (
     <div>
-      <h1 className="mb-8 text-center">{data?.data ? `Edit user - ${data?.data.username}` : 'Create user'}</h1>
       <div className="flex justify-center">
         <Formik
           enableReinitialize
-          initialValues={props.userId ? updatedValues : initialValues}
-          validate={(model: User) => {
+          initialValues={{
+            id: data?.data.id ?? null,
+            username: data?.data.username ?? '',
+            role: data?.data.role ?? UserRole.Buyer,
+          }}
+          validate={(model: Partial<User>) => {
             const errors: { username?: string; password?: string } = {}
             if (!model.username) {
               errors.username = 'Required'
             }
-            if (!model.password) {
-              errors.password = 'Required'
-            }
             return errors
           }}
-          onSubmit={(model: User) => {
+          onSubmit={(model: Partial<User>) => {
             updateUserMutation.mutate(model)
-            props.onSubmit()
+            props.onSubmit(model)
           }}
         >
           <Form className="w-96">
@@ -80,22 +57,7 @@ const UserForm = (props: UserFormProps): JSX.Element => {
                   name="username"
                   className="px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 />
-                <ErrorMessage name="username" component="span" className="text-right text-red-600 text-sm" />
-              </div>
-            </div>
-
-            <div className="flex justify-between mb-4">
-              <label className="w-24 pt-1" htmlFor="password">
-                Password <span className="text-red-400">*</span>
-              </label>
-              <div className="flex flex-col flex-1 ml-6">
-                <Field
-                  id="password"
-                  name="password"
-                  type="password"
-                  className="px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                />
-                <ErrorMessage name="password" component="span" className="text-right text-red-600 text-sm" />
+                <ErrorMessage name="username" component="span" className="text-red-600 text-sm" />
               </div>
             </div>
 
@@ -120,14 +82,18 @@ const UserForm = (props: UserFormProps): JSX.Element => {
 
             <Button
               onClick={() => {
-                props.userId && deleteUserMutation.mutate(props.userId)
+                deleteUserMutation.mutate()
                 props.onDelete?.()
               }}
-              isDisabled={!props.userId}
               text="Delete user"
               className="w-full mt-4"
               variation="danger"
             />
+            <div className="flex justify-center mt-8">
+              <Link href="users/change-password">
+                <p className="font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer">Change password</p>
+              </Link>
+            </div>
           </Form>
         </Formik>
       </div>

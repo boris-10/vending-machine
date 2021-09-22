@@ -49,7 +49,7 @@ const ProductForm = (props: ProductFormProps): JSX.Element => {
 
   return (
     <div>
-      <div className="flex justify-center mt-8">
+      <div className="flex justify-center">
         <Formik
           enableReinitialize
           initialValues={props.productId ? updatedValues : initialValues}

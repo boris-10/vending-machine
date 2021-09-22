@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer'
-import { IsAlphanumeric, IsNotEmpty, IsNumber, IsOptional, IsString, MinLength } from 'class-validator'
+import { IsAlphanumeric, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, MinLength } from 'class-validator'
+import { UserRole } from '../user-role'
 
 export class UpdateUserDto {
   @IsNotEmpty()
@@ -15,4 +16,8 @@ export class UpdateUserDto {
   @IsNumber()
   @IsOptional()
   deposit?: number
+
+  @IsEnum(UserRole)
+  @IsOptional()
+  role?: UserRole
 }

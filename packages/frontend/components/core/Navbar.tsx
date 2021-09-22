@@ -5,11 +5,6 @@ import { useRouter } from 'next/router'
 import { AuthContext } from '../../providers/AuthProvider'
 import Button from '../atoms/Button'
 
-interface NavLink {
-  name: string
-  path: string
-}
-
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
@@ -29,13 +24,13 @@ const Navbar = (): JSX.Element => {
   }
 
   return (
-    <div className="bg-gray-800">
+    <div className="bg-gray-800 mb-8">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="relative flex items-center justify-between h-16">
           <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
             <div className="hidden sm:block sm:ml-6">
-              <div className="flex space-x-4">
-                <Link key="'Products" href="/products">
+              <div className="flex space-x-4 cursor-pointer">
+                <Link href="/products">
                   <span
                     className={classNames(
                       currentRoute.includes('products')
@@ -51,8 +46,10 @@ const Navbar = (): JSX.Element => {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <span className="bg-gray-800 p-4 text-gray-400 cursor-default focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-              {currentUser?.username}
+            <span className="bg-gray-800 p-4 text-gray-400 cursor-default focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white cursor-pointer">
+              <Link href={`/users/me`}>
+                <span>{currentUser?.username}</span>
+              </Link>
             </span>
             {currentUser && <Button onClick={onLogout} text="Logout" />}
           </div>
