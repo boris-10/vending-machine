@@ -1,12 +1,12 @@
 import Link from 'next/link'
+import { ReactElement } from 'react'
 
 import ProductList from '../../components/core/ProductList'
+import Layout from '../../components/core/Layout'
 import Button from '../../components/atoms/Button'
 import WithAuthentication from '../../components/core/WithAuthentication'
 
-import type { NextPage } from 'next'
-
-const ProductListPage: NextPage = () => {
+const ProductListPage = WithAuthentication(function () {
   return (
     <div className="flex flex-col m-auto w-96">
       <ProductList />
@@ -15,6 +15,10 @@ const ProductListPage: NextPage = () => {
       </Link>
     </div>
   )
+})
+
+ProductListPage.getLayout = (page: ReactElement) => {
+  return <Layout>{page}</Layout>
 }
 
-export default WithAuthentication(ProductListPage)
+export default ProductListPage

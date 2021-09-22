@@ -1,6 +1,6 @@
 export enum UserRole {
-  Buyer = 'buyer',
-  Seller = 'seller',
+  Buyer = 'Buyer',
+  Seller = 'Seller',
 }
 
 export default interface User {

@@ -1,10 +1,10 @@
 import Navbar from './Navbar'
 
-const Layout = (props: any): JSX.Element => {
+const Layout = ({ children }: any): JSX.Element => {
   return (
     <div>
       <Navbar />
-      <main>{props.children}</main>
+      <main>{children}</main>
     </div>
   )
 }

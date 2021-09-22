@@ -24,25 +24,25 @@ const AuthContextProvider: FC = ({ children }) => {
   const router = useRouter()
 
   useEffect(() => {
-    if (location.pathname === '/auth') {
+    if (location.pathname === '/login') {
       return
     }
 
     ;(async () => {
       try {
-        const { data: user } = await axios('/auth/me')
+        const { data: user } = await axios('/users/me')
         setCurrentUser(user)
       } catch (error) {
-        router.push('/auth')
+        router.push('/login')
       }
     })()
   }, [])
 
   const login = async (username: string, password: string) => {
-    const { data: tokenResponse } = await axios.post('/auth/login', { username, password })
-    localStorage.setItem('jwt', tokenResponse.accessToken)
+    const { data: token } = await axios.post('/sign-in', { username, password })
+    localStorage.setItem('jwt', token)
 
-    const { data: user } = await axios('/auth/me')
+    const { data: user } = await axios('/users/me')
     setCurrentUser(user)
   }
 

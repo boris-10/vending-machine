@@ -1,9 +1,8 @@
 import { useRouter } from 'next/router'
-
-import UserForm from '../../components/core/UserForm'
-import WithAuthentication from '../../components/core/WithAuthentication'
-
 import type { NextPage } from 'next'
+
+import WithAuthentication from '../../components/core/WithAuthentication'
+import UserForm from '../../components/core/UserForm'
 
 const UserDetailPage: NextPage = () => {
   const router = useRouter()

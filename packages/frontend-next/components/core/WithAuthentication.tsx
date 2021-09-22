@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router'
-import { useEffect, useContext } from 'react'
+import { useEffect, useContext, ReactElement, ReactNode } from 'react'
 import { AuthContext } from '../../providers/AuthProvider'
 import type { FC } from 'react'
 
-type withAuthenticationFn = (Component: FC) => FC
+type withAuthenticationFn = (Component: FC) => FC & { getLayout?: (page: ReactElement) => ReactNode }
 
 const WithAuthentication: withAuthenticationFn = (Component) => {
   const Authenticated: FC = (): JSX.Element | null => {
@@ -13,7 +13,7 @@ const WithAuthentication: withAuthenticationFn = (Component) => {
     useEffect(() => {
       const token = localStorage.getItem('jwt')?.toString()
 
-      if (!token) router.push('/auth')
+      if (!token) router.push('/sing-in')
     })
 
     return currentUser ? <Component /> : null
