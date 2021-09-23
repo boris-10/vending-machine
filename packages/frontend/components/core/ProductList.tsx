@@ -6,12 +6,17 @@ import axios from 'axios'
 import ProductItem from '../core/ProductItem'
 
 import { AuthContext } from '../../providers/AuthProvider'
-
+import { ProductsContext } from '../../providers/ProductsProvider'
 import Product from '../../models/Product'
 import { UserRole } from '../../models/User'
 
-const ProductList = (): JSX.Element => {
+interface ProductListProps {
+  onSelect?: (product: Product) => void
+}
+
+const ProductList = ({ onSelect }: ProductListProps): JSX.Element => {
   const { currentUser } = useContext(AuthContext)
+  const { selectedProduct } = useContext(ProductsContext)
 
   const { data } = useQuery(
     'fetchProducts',
@@ -29,7 +34,12 @@ const ProductList = (): JSX.Element => {
   return (
     <>
       {data?.map((product: Product) => (
-        <ProductItem key={product.id} product={product} />
+        <ProductItem
+          key={product.id}
+          product={product}
+          isSelected={product.id === selectedProduct?.id}
+          onClick={() => onSelect && onSelect(product)}
+        />
       ))}
     </>
   )

@@ -5,12 +5,14 @@ import Product from '../../models/Product'
 interface ProductItemProps {
   product: Product
   isSelected?: boolean
+  onClick: () => void
 }
 
-const ProductItem = ({ product, isSelected }: ProductItemProps): JSX.Element => {
+const ProductItem = ({ product, isSelected, onClick }: ProductItemProps): JSX.Element => {
   return (
     <Link href={`/products/${product.id}`}>
       <div
+        onClick={onClick}
         className={`my-2 border p-2 border-gray-300 rounded-sm cursor-pointer ${
           isSelected ? 'bg-indigo-300' : 'hover:bg-gray-200'
         }`}
