@@ -1,10 +1,8 @@
-import Link from 'next/link'
-
 import Product from '../../models/Product'
 
 interface ProductItemProps {
   product: Product
-  isSelected?: boolean
+  isSelected: boolean
   onClick: () => void
 }
 
