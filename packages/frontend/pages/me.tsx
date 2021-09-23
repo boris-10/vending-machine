@@ -12,7 +12,7 @@ import Layout from '../components/core/Layout'
 
 export default function UserDetailPage() {
   const router = useRouter()
-  const { currentUser, setCurrentUser, logout } = useContext(AuthContext)
+  const { currentUser, setCurrentUser } = useContext(AuthContext)
   const { data } = useQuery('fetchUser', () => axios(`/users/me`), {
     enabled: true,
   })
@@ -27,7 +27,7 @@ export default function UserDetailPage() {
 
   const onSubmit = (user: Partial<User>) => {
     setCurrentUser({ ...(currentUser as User), ...user })
-    router.back()
+    router.push(currentUser?.role === UserRole.Buyer ? '/vending-machine' : '/products')
   }
 
   const onDelete = async () => {
