@@ -42,6 +42,8 @@ export default function VendingMachinePage() {
     })
     setCoinChange(coinChange)
     setDepositedAmount(0)
+    setSelectedProduct(null)
+    setSelectedProductAmount(1)
   })
 
   const isPurchaseEnabled = () => {
