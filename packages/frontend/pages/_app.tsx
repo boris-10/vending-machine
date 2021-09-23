@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode } from 'react'
+import { ReactElement, ReactNode, useEffect, useState } from 'react'
 import type { AppProps } from 'next/app'
 import axios from 'axios'
 import { NextPage } from 'next'
@@ -30,8 +30,10 @@ axios.interceptors.request.use((request) => {
   return request
 })
 
-function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page)
+
+  console.log(pageProps)
 
   return (
     <AuthContextProvider>
@@ -39,4 +41,4 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     </AuthContextProvider>
   )
 }
-export default MyApp
+export default App

@@ -5,6 +5,7 @@ import ProductList from '../../components/core/ProductList'
 import Layout from '../../components/core/Layout'
 import Button from '../../components/atoms/Button'
 import WithAuthentication from '../../components/core/WithAuthentication'
+import { UserRole } from '../../models/User'
 
 const ProductListPage = WithAuthentication(function () {
   return (
@@ -19,6 +20,15 @@ const ProductListPage = WithAuthentication(function () {
 
 ProductListPage.getLayout = (page: ReactElement) => {
   return <Layout>{page}</Layout>
+}
+
+export async function getStaticProps() {
+  return {
+    props: {
+      protected: true,
+      roles: [UserRole.Buyer],
+    },
+  }
 }
 
 export default ProductListPage

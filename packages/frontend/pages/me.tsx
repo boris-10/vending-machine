@@ -16,15 +16,19 @@ const UserDetailPage = WithAuthentication(function () {
     router.back()
   }
 
-  const onDelete = () => {
-    logout()
-  }
-
-  return <UserForm onSubmit={onSubmit} onDelete={onDelete} />
+  return <UserForm onSubmit={onSubmit} onDelete={logout} />
 })
 
 UserDetailPage.getLayout = (page: ReactElement) => {
   return <Layout>{page}</Layout>
+}
+
+export async function getStaticProps() {
+  return {
+    props: {
+      protected: true,
+    },
+  }
 }
 
 export default UserDetailPage

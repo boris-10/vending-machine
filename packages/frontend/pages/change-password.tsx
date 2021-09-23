@@ -12,4 +12,12 @@ ChangePassword.getLayout = (page: ReactElement) => {
   return <Layout>{page}</Layout>
 }
 
+export async function getStaticProps() {
+  return {
+    props: {
+      protected: true,
+    },
+  }
+}
+
 export default ChangePassword
