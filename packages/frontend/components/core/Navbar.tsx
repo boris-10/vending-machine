@@ -48,8 +48,8 @@ const Navbar = (): JSX.Element => {
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             <span className="bg-gray-800 p-4 text-gray-400 cursor-default focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white cursor-pointer">
-              <Link href="me">
-                <span>{currentUser?.username}</span>
+              <Link href="/me">
+                <span className="cursor-pointer">{currentUser?.username}</span>
               </Link>
             </span>
             {currentUser && <Button onClick={onLogout} text="Logout" />}
