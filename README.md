@@ -29,16 +29,20 @@ npm install
 ```
 
 This will run postinstall script and install dependencies in both packages.
-It's important to set `.env` file at the `packages/backend` folder (there is `.env.example` for reference).
+
+> It's important to set `.env` file at the `packages/backend` folder (there is `.env.example` for reference).
 
 ### Start
 
-Start backend and frontend dev servers with
+Start Postgres container (via Docker Compose), backend and frontend dev servers with
 
 ```bash
+npm run dev:backend:db
+npm run dev:backend:server
 npm run dev:frontend
-npm run dev:backend
 ```
+
+Visit [localhost:3000](http://localhost:3000)
 
 ### VS Code
 
