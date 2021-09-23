@@ -5,7 +5,7 @@ import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
-import User from '../models/User'
+import User, { UserRole } from '../models/User'
 import { AuthContext } from '../providers/AuthProvider'
 
 import 'tailwindcss/tailwind.css'
@@ -57,6 +57,11 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
 
     const { data: user } = await axios('/users/me')
     setCurrentUser(user)
+    if (user?.role === UserRole.Buyer) {
+      router.push('/vending-machine')
+    } else {
+      router.push('/products')
+    }
   }
 
   const logout = async () => {

@@ -23,7 +23,7 @@ export default function VendingMachinePage() {
   }, [currentUser])
 
   const depositMutation = useMutation(async (amount: number) => {
-    const { data } = await axios.post('/machine/deposit', { amount })
+    await axios.post('/machine/deposit', { amount })
     setDepositedAmount(depositedAmount + amount)
   })
 
@@ -55,19 +55,20 @@ export default function VendingMachinePage() {
   return (
     <div className="flex flex-col m-auto w-96">
       <ProductList onSelect={(product: Product) => setSelectedProduct(product)} />
-      <div className="mb-4">
+      <div className="flex justify-between mb-4">
         {[5, 10, 20, 50, 100].map((n) => (
-          <div key={n} className="inline mr-2 mb-4">
+          <div key={n} className="inline">
             <Button text={`${n} ¢`} onClick={() => depositMutation.mutate(n)} />
           </div>
         ))}
-        <Button
-          text="Reset deposit"
-          isDisabled={depositedAmount === 0}
-          onClick={() => resetMutation.mutate()}
-          variation="warning"
-        />
       </div>
+      <Button
+        text="Reset deposit"
+        isDisabled={depositedAmount === 0}
+        onClick={() => resetMutation.mutate()}
+        variation="warning"
+        className="mb-4"
+      />
       <div className="flex justify-between mb-4">
         <h2>
           Selected product:&nbsp;

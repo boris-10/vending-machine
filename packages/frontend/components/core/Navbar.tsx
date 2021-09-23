@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 
 import { AuthContext } from '../../providers/AuthProvider'
 import Button from '../shared/Button'
+import { UserRole } from '../../models/User'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -13,11 +14,6 @@ const Navbar = (): JSX.Element => {
   const router = useRouter()
 
   const { logout, currentUser } = useContext(AuthContext)
-  const [currentRoute, setCurrentRoute] = useState('')
-
-  useEffect(() => {
-    setCurrentRoute(router.pathname)
-  }, [])
 
   const onLogout = () => {
     logout()
@@ -31,17 +27,30 @@ const Navbar = (): JSX.Element => {
           <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
             <div className="hidden sm:block sm:ml-6">
               <div className="flex space-x-4 cursor-pointer">
-                <Link href="/products">
-                  <span
-                    className={classNames(
-                      currentRoute.includes('products')
-                        ? 'bg-gray-900 text-white'
-                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                      'px-3 py-2 rounded-md text-sm font-medium'
-                    )}
-                  >
-                    Products
-                  </span>
+                <Link href={currentUser?.role === UserRole.Seller ? '/products' : '/vending-machine'}>
+                  {currentUser?.role === UserRole.Seller ? (
+                    <span
+                      className={classNames(
+                        router.pathname.includes('products')
+                          ? 'bg-gray-900 text-white'
+                          : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                        'px-3 py-2 rounded-md text-sm font-medium'
+                      )}
+                    >
+                      Products
+                    </span>
+                  ) : (
+                    <span
+                      className={classNames(
+                        router.pathname.includes('vending-machine')
+                          ? 'bg-gray-900 text-white'
+                          : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                        'px-3 py-2 rounded-md text-sm font-medium'
+                      )}
+                    >
+                      Vending Machine
+                    </span>
+                  )}
                 </Link>
               </div>
             </div>

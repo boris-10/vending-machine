@@ -11,17 +11,17 @@ interface LoginModel {
 }
 
 interface LoginFormProps {
-  onLoginSuccess: () => void
+  onLoginSuccess?: () => void
 }
 
-const LoginForm = (props: LoginFormProps): JSX.Element => {
+const LoginForm = ({ onLoginSuccess }: LoginFormProps): JSX.Element => {
   const { login } = useContext(AuthContext)
   const router = useRouter()
 
   const loginMutation = useMutation(async (loginModel: LoginModel) => {
     try {
       await login(loginModel.username, loginModel.password)
-      props.onLoginSuccess()
+      onLoginSuccess && onLoginSuccess()
     } catch (error) {
       throw error
     }
