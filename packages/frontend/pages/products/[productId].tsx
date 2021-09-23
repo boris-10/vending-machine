@@ -3,10 +3,9 @@ import { ReactElement } from 'react'
 
 import ProductForm from '../../components/core/ProductForm'
 import Layout from '../../components/core/Layout'
-import WithAuthentication from '../../components/core/WithAuthentication'
 import { UserRole } from '../../models/User'
 
-const ProductDetailPage = WithAuthentication(function () {
+export default function ProductDetailPage() {
   const router = useRouter()
 
   const { productId } = router.query
@@ -16,19 +15,24 @@ const ProductDetailPage = WithAuthentication(function () {
   }
 
   return <ProductForm productId={Number(productId)} onSubmit={redirectToProducts} onDelete={redirectToProducts} />
-})
+}
 
 ProductDetailPage.getLayout = (page: ReactElement) => {
   return <Layout>{page}</Layout>
 }
 
-export async function getStaticProps() {
+export function getStaticProps() {
   return {
     props: {
-      protected: true,
-      roles: [UserRole.Buyer],
+      auth: true,
+      roles: [UserRole.Seller],
     },
   }
 }
 
-export default ProductDetailPage
+export function getStaticPaths() {
+  return {
+    paths: [],
+    fallback: 'blocking',
+  }
+}

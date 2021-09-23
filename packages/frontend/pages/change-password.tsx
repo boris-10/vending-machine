@@ -1,23 +1,19 @@
-import { useRouter } from 'next/router'
 import { ReactElement } from 'react'
 
 import Layout from '../components/core/Layout'
-import WithAuthentication from '../components/core/WithAuthentication'
 
-const ChangePassword = WithAuthentication(function () {
+export default function ChangePassword() {
   return null
-})
+}
 
 ChangePassword.getLayout = (page: ReactElement) => {
   return <Layout>{page}</Layout>
 }
 
-export async function getStaticProps() {
+export function getStaticProps() {
   return {
     props: {
-      protected: true,
+      auth: true,
     },
   }
 }
-
-export default ChangePassword

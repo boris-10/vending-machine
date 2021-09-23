@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useQuery, useMutation } from 'react-query'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 
-import Button from '../atoms/Button'
+import Button from '../shared/Button'
 
 import Product from '../../models/Product'
 

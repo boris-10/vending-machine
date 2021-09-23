@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 
 import RegisterForm from '../components/core/RegisterForm'
 
-const RegisterPage = () => {
+export default function RegisterPage() {
   const router = useRouter()
 
   const onRegisterSuccess = () => {
@@ -11,5 +11,3 @@ const RegisterPage = () => {
 
   return <RegisterForm onRegisterSuccess={onRegisterSuccess} />
 }
-
-export default RegisterPage

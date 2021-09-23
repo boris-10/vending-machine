@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import { AuthContext } from '../../providers/AuthProvider'
-import Button from '../atoms/Button'
+import Button from '../shared/Button'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -21,6 +21,7 @@ const Navbar = (): JSX.Element => {
 
   const onLogout = () => {
     logout()
+    router.push('/login')
   }
 
   return (

@@ -2,9 +2,7 @@ import { useRouter } from 'next/router'
 
 import LoginForm from '../components/core/LoginForm'
 
-import type { NextPage } from 'next'
-
-const LoginPage = () => {
+export default function LoginPage() {
   const router = useRouter()
 
   const onLoginSuccess = () => {
@@ -13,5 +11,3 @@ const LoginPage = () => {
 
   return <LoginForm onLoginSuccess={onLoginSuccess} />
 }
-
-export default LoginPage

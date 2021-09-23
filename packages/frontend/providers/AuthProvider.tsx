@@ -1,71 +1,17 @@
-import { createContext, useState, FC, useEffect } from 'react'
-
-import axios from 'axios'
+import { createContext } from 'react'
 
 import User from '../models/User'
-import { useRouter } from 'next/router'
 
-type AuthContextState = {
-  currentUser: Partial<User> | null
+interface AuthContextState {
+  currentUser: User | null
+  setCurrentUser: (user: User) => void
   login: (username: string, password: string) => Promise<void>
-  logout: () => void
-  setCurrentUser: (user: Partial<User>) => void
+  logout: () => Promise<void>
 }
 
-const contextDefaultValues: AuthContextState = {
+export const AuthContext = createContext<AuthContextState>({
   currentUser: null,
-  login: () => Promise.resolve(),
-  logout: () => undefined,
-  setCurrentUser: (user: Partial<User>) => undefined,
-}
-
-export const AuthContext = createContext<AuthContextState>(contextDefaultValues)
-
-const AuthContextProvider: FC = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<Partial<User> | null>(null)
-  const router = useRouter()
-
-  useEffect(() => {
-    if (location.pathname === '/login') {
-      return
-    }
-
-    ;(async () => {
-      try {
-        const { data: user } = await axios('/users/me')
-        setCurrentUser(user)
-      } catch (error) {
-        router.push('/login')
-      }
-    })()
-  }, [])
-
-  const login = async (username: string, password: string) => {
-    const { data: token } = await axios.post('/sign-in', { username, password })
-    localStorage.setItem('jwt', token)
-
-    const { data: user } = await axios('/users/me')
-    setCurrentUser(user)
-  }
-
-  const logout = () => {
-    localStorage.removeItem('jwt')
-    setCurrentUser(null)
-    router.push('/login')
-  }
-
-  return (
-    <AuthContext.Provider
-      value={{
-        currentUser,
-        login,
-        logout,
-        setCurrentUser,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  )
-}
-
-export default AuthContextProvider
+  setCurrentUser: (user: User) => undefined,
+  login: (username: string, password: string) => Promise.resolve(),
+  logout: () => Promise.resolve(),
+})

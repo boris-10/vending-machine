@@ -3,11 +3,10 @@ import { ReactElement } from 'react'
 
 import ProductList from '../../components/core/ProductList'
 import Layout from '../../components/core/Layout'
-import Button from '../../components/atoms/Button'
-import WithAuthentication from '../../components/core/WithAuthentication'
+import Button from '../../components/shared/Button'
 import { UserRole } from '../../models/User'
 
-const ProductListPage = WithAuthentication(function () {
+export default function ProductListPage() {
   return (
     <div className="flex flex-col m-auto w-96">
       <ProductList />
@@ -16,19 +15,17 @@ const ProductListPage = WithAuthentication(function () {
       </Link>
     </div>
   )
-})
+}
 
 ProductListPage.getLayout = (page: ReactElement) => {
   return <Layout>{page}</Layout>
 }
 
-export async function getStaticProps() {
+export function getStaticProps() {
   return {
     props: {
-      protected: true,
-      roles: [UserRole.Buyer],
+      auth: true,
+      roles: [UserRole.Seller],
     },
   }
 }
-
-export default ProductListPage

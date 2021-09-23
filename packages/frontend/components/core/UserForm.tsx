@@ -3,7 +3,7 @@ import { useQuery, useMutation } from 'react-query'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import Link from 'next/link'
 
-import Button from '../../components/atoms/Button'
+import Button from '../shared/Button'
 
 import User, { UserRole } from '../../models/User'
 

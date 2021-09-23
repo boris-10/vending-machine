@@ -9,7 +9,6 @@ import { AuthContext } from '../../providers/AuthProvider'
 
 import Product from '../../models/Product'
 import { UserRole } from '../../models/User'
-import WithAuthentication from './WithAuthentication'
 
 const ProductList = (): JSX.Element => {
   const { currentUser } = useContext(AuthContext)
@@ -36,4 +35,4 @@ const ProductList = (): JSX.Element => {
   )
 }
 
-export default WithAuthentication(ProductList)
+export default ProductList
