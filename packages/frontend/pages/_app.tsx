@@ -4,6 +4,8 @@ import axios from 'axios'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import ReactNotification, { store } from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
 
 import User, { UserRole } from '../models/User'
 import { AuthContext } from '../providers/AuthProvider'
@@ -29,6 +31,23 @@ axios.interceptors.request.use((request) => {
   }
 
   return request
+})
+
+axios.interceptors.response.use(undefined, (error) => {
+  const message = Array.isArray(error.response?.data?.message)
+    ? error.response?.data?.message.join('\n')
+    : error.response?.data?.message
+
+  store.addNotification({
+    title: 'Error',
+    message,
+    type: 'danger',
+    insert: 'top',
+    container: 'top-right',
+    dismiss: { duration: 3000, onScreen: true },
+  })
+
+  return Promise.reject(error)
 })
 
 function App({ Component, pageProps }: AppPropsWithLayout) {
@@ -89,6 +108,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         logout,
       }}
     >
+      <ReactNotification />
       <QueryClientProvider client={queryClient}>{getLayout(<Component {...pageProps} />)}</QueryClientProvider>
     </AuthContext.Provider>
   )

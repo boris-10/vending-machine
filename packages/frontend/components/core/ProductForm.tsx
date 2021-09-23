@@ -12,12 +12,12 @@ interface ProductFormProps {
   onDelete?: () => void
 }
 
-const ProductForm = (props: ProductFormProps): JSX.Element => {
-  const { data, remove } = useQuery('fetchProductById', () => axios(`/products/${props.productId}`), {
-    enabled: !!props.productId,
+const ProductForm = ({ productId, onDelete, onSubmit }: ProductFormProps): JSX.Element => {
+  const { data, remove } = useQuery('fetchProductById', () => axios(`/products/${productId}`), {
+    enabled: !!productId,
   })
 
-  if (!props.productId) {
+  if (!productId) {
     remove()
   }
 
@@ -52,7 +52,7 @@ const ProductForm = (props: ProductFormProps): JSX.Element => {
       <div className="flex justify-center">
         <Formik
           enableReinitialize
-          initialValues={props.productId ? updatedValues : initialValues}
+          initialValues={productId ? updatedValues : initialValues}
           validate={(model: Product) => {
             const errors: { name?: string } = {}
             if (!model.name) {
@@ -62,7 +62,7 @@ const ProductForm = (props: ProductFormProps): JSX.Element => {
           }}
           onSubmit={async (model: Product) => {
             await upsertProductMutation.mutateAsync(model)
-            props.onSubmit()
+            onSubmit()
           }}
         >
           <Form className="w-96">
@@ -113,11 +113,11 @@ const ProductForm = (props: ProductFormProps): JSX.Element => {
 
             <Button type="submit" text="Submit" className="w-full mt-4" variation="success" />
 
-            {props.productId ? (
+            {productId ? (
               <Button
                 onClick={() => {
-                  props.productId && deleteProductMutation.mutate(props.productId)
-                  props.onDelete?.()
+                  productId && deleteProductMutation.mutate(productId)
+                  onDelete?.()
                 }}
                 text="Delete product"
                 className="w-full mt-4"
